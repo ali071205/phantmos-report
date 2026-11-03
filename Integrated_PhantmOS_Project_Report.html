@@ -1,0 +1,2817 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DESIGN AND IMPLEMENTATION OF PHANTMOS - Institutional Internship Report</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&family=Noto+Sans+Devanagari:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap');
+
+    @page {
+      size: A4 portrait;
+      margin: 12mm 14mm 14mm 14mm;
+      @bottom-center {
+        content: counter(page);
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 8.5pt;
+        color: #475569;
+      }
+    }
+
+    @page:first {
+      margin: 8mm 10mm 8mm 10mm;
+      @bottom-center {
+        content: "";
+      }
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 12pt;
+      line-height: 1.5;
+      color: #111827;
+      background-color: #ffffff;
+      margin: 0 auto;
+      max-width: 54em;
+      padding: 0;
+      text-rendering: optimizeLegibility;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    @media print {
+      body {
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: 100% !important;
+        background: transparent !important;
+      }
+
+      .cover-page {
+        min-height: 275mm !important;
+        max-height: 278mm !important;
+        height: 275mm !important;
+        padding: 14px 18px !important;
+        margin: 0 !important;
+        page-break-before: avoid !important;
+        page-break-inside: avoid !important;
+        page-break-after: always !important;
+        box-sizing: border-box !important;
+      }
+
+      .prelim-page {
+        page-break-inside: avoid !important;
+        page-break-after: always !important;
+        padding: 0 !important;
+        min-height: unset !important;
+      }
+
+      .prelim-page-toc {
+        page-break-inside: auto !important;
+        page-break-after: always !important;
+        padding: 0 !important;
+      }
+
+      .main-toc-table, .toc-table, .toc-container {
+        page-break-inside: auto !important;
+      }
+
+      .main-toc-header, .prelim-title, .academic-chapter-header, h2, h3 {
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+      }
+
+      .main-toc-divider, .prelim-divider, .academic-chapter-divider {
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+      }
+
+      .main-toc-table tr {
+        page-break-inside: avoid !important;
+      }
+
+      .signature-row, .sig-block {
+        page-break-inside: avoid !important;
+      }
+
+      .section-header {
+        margin-top: 1.15em !important;
+        margin-bottom: 0.35em !important;
+      }
+
+      p {
+        margin: 0.6em 0 !important;
+        line-height: 1.5 !important;
+      }
+
+      .team-gallery-container {
+        page-break-inside: avoid !important;
+      }
+    }
+    
+    p {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 12pt;
+      line-height: 1.5;
+      margin: 0.55em 0;
+      text-align: justify;
+      hyphens: auto;
+    }
+
+    /* =========================================================
+       COVER PAGE: FORMAL ACADEMIC UNIVERSITY REPORT
+       ========================================================= */
+    .cover-page {
+      text-align: center;
+      padding: 16px 20px;
+      page-break-after: always;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 920px;
+      border: 2px solid #0f172a;
+      position: relative;
+      background: #ffffff;
+      outline: 1px solid #94a3b8;
+      outline-offset: -6px;
+      box-sizing: border-box;
+    }
+
+    .cover-header {
+      border-bottom: 2px solid #0f172a;
+      padding-bottom: 8px;
+      margin-bottom: 8px;
+    }
+    
+    .cover-naac-badge {
+      display: inline-block;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 8pt;
+      font-weight: 700;
+      color: #0f172a;
+      border: 1px solid #0f172a;
+      padding: 3px 14px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .cover-college-name {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 14pt;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: 0.8px;
+      margin: 4px 0;
+      text-transform: uppercase;
+    }
+    
+    .cover-college-sub {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 9.5pt;
+      color: #475569;
+      font-weight: 600;
+      margin: 2px 0;
+    }
+    
+    .cover-dept-name {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 10pt;
+      font-weight: 700;
+      color: #0f172a;
+      margin-top: 6px;
+      letter-spacing: 0.5px;
+    }
+    
+    .cover-logo-wrap {
+      margin: 12px auto;
+      display: inline-block;
+    }
+    
+    .cover-logo-img {
+      max-width: 100px;
+      max-height: 100px;
+      object-fit: contain;
+      border-radius: 50%;
+      border: 2px solid #0f172a;
+      padding: 4px;
+      background: #ffffff;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+    }
+    
+    .cover-report-tag {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 11pt;
+      font-weight: 800;
+      color: #0f172a;
+      background: transparent;
+      border-top: 2px solid #0f172a;
+      border-bottom: 2px solid #0f172a;
+      display: inline-block;
+      padding: 4px 22px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin: 10px auto 4px auto;
+    }
+    
+    .cover-title-container {
+      margin: 8px auto 12px auto;
+      max-width: 95%;
+      position: relative;
+    }
+    
+    .cover-main-title {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 26pt;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: 3.5px;
+      line-height: 1.1;
+      margin: 6px 0;
+      text-transform: uppercase;
+    }
+    
+    .cover-subtitle-main {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 11.5pt;
+      font-weight: 600;
+      color: #334155;
+      margin-top: 8px;
+      line-height: 1.4;
+      letter-spacing: 0.3px;
+    }
+    
+    .cover-subtitle-secondary {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 9pt;
+      color: #64748b;
+      font-weight: 600;
+      margin-top: 6px;
+      letter-spacing: 0.8px;
+    }
+    
+    .cover-notice {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 10pt;
+      color: #334155;
+      margin: 10px auto;
+      line-height: 1.5;
+      padding: 8px 16px;
+      border-top: 1px solid #cbd5e1;
+      border-bottom: 1px solid #cbd5e1;
+      max-width: 90%;
+    }
+    
+    .cover-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      text-align: left;
+      border-top: 2px solid #0f172a;
+      padding-top: 14px;
+      margin-top: 10px;
+      font-size: 9.5pt;
+    }
+    
+    .cover-grid-col h4 {
+      font-family: 'Times New Roman', Times, serif;
+      margin: 0 0 6px 0;
+      font-size: 9.5pt;
+      color: #0f172a;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      border-bottom: 1px solid #cbd5e1;
+      padding-bottom: 3px;
+    }
+
+    /* =========================================================
+       PRELIMINARY PAGES (Approval, Declaration, Acknowledgement)
+       ========================================================= */
+    .prelim-page {
+      page-break-after: always;
+      padding: 10px 0;
+    }
+    
+    .prelim-title {
+      text-align: center;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 17pt;
+      font-weight: 700;
+      letter-spacing: 5px;
+      color: #1c1917;
+      text-transform: uppercase;
+      margin: 12px 0 8px 0;
+    }
+
+    .prelim-divider {
+      width: 100%;
+      height: 2px;
+      background-color: #292524;
+      margin: 8px 0 24px 0;
+    }
+
+    .signature-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 45px;
+      font-size: 10pt;
+    }
+    
+    .sig-block {
+      text-align: center;
+      width: 45%;
+    }
+    
+    .sig-line {
+      border-top: 1.5px solid #0f172a;
+      margin-top: 45px;
+      padding-top: 6px;
+      font-weight: 600;
+    }
+
+    /* =========================================================
+       UNIFIED ELEGANT ACADEMIC CHAPTER HEADERS
+       ========================================================= */
+    .academic-chapter-header {
+      margin-top: 28px;
+      margin-bottom: 22px;
+      page-break-after: avoid;
+      page-break-inside: avoid;
+      text-align: left;
+    }
+
+    .academic-chapter-number {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 10pt;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      color: #64748b;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .academic-chapter-title {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 16pt;
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: 1.5px;
+      margin: 4px 0 0 0;
+      text-transform: uppercase;
+    }
+
+    .academic-chapter-divider {
+      width: 100%;
+      height: 2px;
+      background-color: #0f172a;
+      margin-top: 8px;
+      margin-bottom: 20px;
+    }
+
+    /* Section & Subsection Headers */
+    h3.section-header {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 14pt;
+      font-weight: 700;
+      color: #0f172a;
+      margin-top: 1.4em;
+      margin-bottom: 0.4em;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #e2e8f0;
+      display: block;
+    }
+    
+    h3.section-header::before {
+      content: "";
+      display: none;
+    }
+    
+    h4.subsection-header {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 12pt;
+      font-weight: 700;
+      color: #1e293b;
+      margin-top: 1.1em;
+      margin-bottom: 0.3em;
+    }
+
+    /* Academic Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.4em 0;
+      font-size: 9.5pt;
+      page-break-inside: avoid;
+      border: 1px solid #cbd5e1;
+    }
+    
+    th {
+      background-color: #f8fafc;
+      color: #0f172a;
+      font-weight: 700;
+      text-align: left;
+      padding: 8px 10px;
+      border: 1px solid #cbd5e1;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 9pt;
+      border-bottom: 2px solid #0f172a;
+      letter-spacing: 0.3px;
+    }
+    
+    td {
+      padding: 7px 10px;
+      border: 1px solid #e2e8f0;
+      vertical-align: top;
+      font-family: 'Times New Roman', Times, serif;
+      color: #1e293b;
+    }
+    
+    tr:nth-child(even) td {
+      background-color: #fbfcfe;
+    }
+
+    /* Code & Terminal Blocks */
+    pre {
+      background-color: #f8fafc;
+      color: #0f172a;
+      padding: 11px 14px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+      font-size: 8.5pt;
+      line-height: 1.45;
+      overflow-x: auto;
+      border: 1px solid #e2e8f0;
+      border-left: 3.5px solid #0f172a;
+      margin: 1.2em 0;
+      page-break-inside: avoid;
+    }
+    
+    code {
+      font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+      font-size: 88%;
+      background: #f1f5f9;
+      padding: 2px 5px;
+      border-radius: 3px;
+      color: #0f172a;
+      border: 1px solid #e2e8f0;
+    }
+    
+    pre code {
+      background: transparent;
+      padding: 0;
+      color: inherit;
+      border: none;
+    }
+
+    
+    /* Project Engineering Team Gallery */
+    .team-gallery-container {
+      margin: 1.8em 0;
+      page-break-inside: avoid;
+    }
+
+    .team-gallery-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .team-member-card {
+      width: 124px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background: #ffffff;
+      padding: 9px 6px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+
+    .team-photo-frame {
+      width: 105px;
+      height: 130px;
+      border: 1.5px solid #0f172a;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 7px;
+      background: #f8fafc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .team-photo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .team-photo-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #f1f5f9;
+      color: #64748b;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 8pt;
+      padding: 6px;
+      text-align: center;
+    }
+
+    .team-member-name {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 8.8pt;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 2px 0 1px 0;
+      line-height: 1.2;
+    }
+
+    .team-member-role {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 7.5pt;
+      font-weight: 600;
+      color: #1e3a8a;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      margin-bottom: 3px;
+    }
+
+    .team-member-focus {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 7.5pt;
+      color: #475569;
+      line-height: 1.25;
+    }
+
+    /* Figures & Diagrams */
+    figure, .figure-box {
+      margin: 14px auto !important;
+      text-align: center !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      border: 1px solid #cbd5e1 !important;
+      padding: 6px 10px !important;
+      background: #ffffff !important;
+      border-radius: 4px !important;
+      max-width: 96% !important;
+      box-sizing: border-box !important;
+    }
+    
+    figure img, .figure-box img {
+      max-width: 92% !important;
+      max-height: 155mm !important;
+      object-fit: contain !important;
+      height: auto !important;
+      border: 1px solid #e2e8f0 !important;
+      display: block !important;
+      margin: 0 auto !important;
+    }
+    
+    figcaption, .figure-caption {
+      font-family: 'Times New Roman', Times, serif !important;
+      font-size: 9pt !important;
+      font-weight: 600 !important;
+      color: #334155 !important;
+      margin-top: 6px !important;
+      letter-spacing: 0.2px !important;
+      page-break-before: avoid !important;
+      break-before: avoid !important;
+    }
+
+    table {
+      page-break-inside: auto !important;
+      break-inside: auto !important;
+    }
+
+    tr {
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+
+    thead {
+      display: table-header-group !important;
+    }
+
+    /* =========================================================
+       EDITORIAL BOOK TABLE OF CONTENTS & INDEX TABLES
+       ========================================================= */
+    .main-toc-header {
+      text-align: center;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 18pt;
+      font-weight: 700;
+      letter-spacing: 7px;
+      color: #1c1917;
+      text-transform: uppercase;
+      margin: 12px 0 8px 0;
+    }
+
+    .main-toc-divider {
+      width: 100%;
+      height: 2px;
+      background-color: #292524;
+      margin: 10px 0 20px 0;
+    }
+
+    .main-toc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 10pt;
+      border: none;
+    }
+
+    .main-toc-table tr td {
+      padding: 5px 2px;
+      border: none;
+      vertical-align: bottom;
+      background: transparent !important;
+    }
+
+    .main-toc-table .toc-title {
+      color: #292524;
+      padding-right: 8px;
+      white-space: nowrap;
+    }
+
+    .main-toc-table .toc-chapter {
+      font-family: 'Times New Roman', Times, serif;
+      font-weight: 800;
+      color: #0f172a;
+      font-size: 10pt;
+      padding-top: 10px !important;
+      letter-spacing: 0.3px;
+    }
+
+    .main-toc-table .toc-sub {
+      padding-left: 20px !important;
+      color: #44403c;
+      font-size: 9.5pt;
+    }
+
+    .main-toc-table .toc-dots {
+      width: 100%;
+      border-bottom: 1.5px dotted #a8a29e;
+      height: 1.1em;
+      margin-bottom: 4px;
+    }
+
+    .main-toc-table .toc-page {
+      padding-left: 10px;
+      text-align: right;
+      font-family: 'Times New Roman', Times, serif;
+      font-weight: 700;
+      color: #1c1917;
+      white-space: nowrap;
+      font-size: 10pt;
+    }
+
+    .toc-container {
+      margin: 16px 0;
+    }
+
+    .toc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10pt;
+      border: none;
+    }
+
+    .toc-table tr td {
+      padding: 4px 2px;
+      border: none;
+      vertical-align: bottom;
+      background: transparent !important;
+    }
+
+    .toc-title {
+      padding-right: 6px;
+      white-space: nowrap;
+    }
+
+    .toc-dots {
+      width: 100%;
+      border-bottom: 1.5px dotted #94a3b8;
+      height: 1em;
+      margin-bottom: 3px;
+    }
+
+    .toc-page {
+      padding-left: 8px;
+      text-align: right;
+      font-family: 'Times New Roman', Times, serif;
+      font-weight: 700;
+      color: #0f172a;
+      white-space: nowrap;
+    }
+
+    .toc-chapter {
+      font-weight: 700;
+      color: #0f172a;
+      padding-top: 8px !important;
+    }
+
+    .toc-sub {
+      padding-left: 18px !important;
+      color: #334155;
+    }
+
+    /* Badges & Utility */
+    .badge-pass {
+      background-color: #f0fdf4;
+      color: #166534;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      padding: 2px 7px;
+      border: 1px solid #bbf7d0;
+      font-size: 8pt;
+      display: inline-block;
+      border-radius: 3px;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+    
+    .no-break {
+      page-break-inside: avoid;
+    }
+  </style>
+</head>
+<body>
+<div class="cover-page">
+<div class="cover-header">
+<div class="cover-naac-badge">NAAC ACCREDITED "A++" GRADE • AN ISO 9001:2015 CERTIFIED INSTITUTION</div>
+<div class="cover-college-name">GOVT. HOLKAR (MODEL AUTONOMOUS) SCIENCE COLLEGE</div>
+<div class="cover-college-sub">INDORE, MADHYA PRADESH – 452001 (INDIA)</div>
+<div class="cover-college-sub">(Affiliated to Devi Ahilya Vishwavidyalaya, Indore)</div>
+<div class="cover-dept-name">DEPARTMENT OF COMPUTER SCIENCE &amp; INFORMATION TECHNOLOGY</div>
+</div>
+<div class="cover-logo-wrap">
+<img alt="Govt. Holkar Science College Emblem" class="cover-logo-img" src="./media/holkar_circle_logo.png"/>
+</div>
+<div class="cover-report-tag">INSTITUTIONAL INTERNSHIP WORK REPORT</div>
+<div class="cover-title-container">
+<h1 class="cover-main-title">PHANTMOS</h1>
+<div class="cover-subtitle-main">
+      DESIGN AND IMPLEMENTATION OF A DISTRIBUTED AI JOB DISCOVERY AND RESUME-SYNTHESIS PLATFORM
+    </div>
+<div class="cover-subtitle-secondary">
+      SELF-HOSTED NEURAL INFERENCE • THREE-NODE KVM CLUSTER • WIREGUARD MESH
+    </div>
+</div>
+<div class="cover-notice">
+    Submitted in partial fulfillment of the curriculum internship requirements for the award of the degree of<br/><strong>BACHELOR OF COMPUTER APPLICATIONS (BCA)</strong><br/>
+    Semester: V • Academic Session: 2026–2027<br/>
+<strong>Institutional Internship Duration:</strong> 5 September 2026 – 1 November 2026<br/>
+<span style="font-size: 8.5pt; color: #475569; display: inline-block; margin-top: 3px;">Phase I (5 Sep – 10 Oct): On-Campus Lab Virtualization • Daily 10:00 AM – 4:00 PM (6 hrs/day, ClusterOS)<br/>Phase II (11 Oct – 1 Nov): Remote Multi-Agent Engineering via Google Meet (6 hrs/day, PhantmOS)</span>
+</div>
+<div class="cover-grid" style="grid-template-columns: 1fr 1.25fr; gap: 18px; margin-top: 8px; padding-top: 10px; font-size: 8.5pt;">
+<div class="cover-grid-col">
+<h4>SUBMITTED TO</h4>
+<strong>Project Guide &amp; Mentor:</strong><br/>
+      Prof. Manish Singh<br/><br/>
+<strong>Head of Department:</strong><br/>
+      Dr. Pradeep Sharma<br/><br/>
+<span style="color: #475569; font-size: 8pt; line-height: 1.4; display: block; margin-top: 2px;">Department of Computer Science &amp; IT<br/>Govt. Holkar (Model Autonomous) Science College, Indore (M.P.)</span>
+</div>
+<div class="cover-grid-col">
+<h4>SUBMITTED BY (PROJECT TEAM)</h4>
+<table style="width: 100%; border: none; margin: 0; font-size: 8.2pt; line-height: 1.35; background: transparent;">
+<tr style="background: transparent;"><td style="border: none; padding: 2px 0;"><strong>Akash Yaduwanshi</strong> <span style="color: #64748b; font-size: 7.8pt;">(Roll: 24550306)</span></td><td style="border: none; padding: 2px 0; text-align: right; color: #475569;">Team Leader</td></tr>
+<tr style="background: transparent;"><td style="border: none; padding: 2px 0;"><strong>Ali Ahmad Raza Sheikh</strong> <span style="color: #64748b; font-size: 7.8pt;">(Roll: 24550307)</span></td><td style="border: none; padding: 2px 0; text-align: right; color: #475569;">Team Manager</td></tr>
+<tr style="background: transparent;"><td style="border: none; padding: 2px 0;"><strong>Onkar Dubey</strong> <span style="color: #64748b; font-size: 7.8pt;">(Roll: 24550342)</span></td><td style="border: none; padding: 2px 0; text-align: right; color: #475569;">Frontend Developer</td></tr>
+<tr style="background: transparent;"><td style="border: none; padding: 2px 0;"><strong>Krishnapal Singh Chawda</strong> <span style="color: #64748b; font-size: 7.8pt;">(Roll: 24550330)</span></td><td style="border: none; padding: 2px 0; text-align: right; color: #475569;">Frontend Developer</td></tr>
+<tr style="background: transparent;"><td style="border: none; padding: 2px 0;"><strong>Pankaj Badoliya</strong> <span style="color: #64748b; font-size: 7.8pt;">(Roll: 24550343)</span></td><td style="border: none; padding: 2px 0; text-align: right; color: #475569;">Backend Developer</td></tr>
+<tr style="background: transparent;"><td style="border: none; padding: 2px 0;"><strong>Anushruti Jain</strong> <span style="color: #64748b; font-size: 7.8pt;">(Roll: 24550313)</span></td><td style="border: none; padding: 2px 0; text-align: right; color: #475569;">Backend Developer</td></tr>
+<tr style="background: transparent;"><td style="border: none; padding: 2px 0;"><strong>Mod Uwesh Khan Multani</strong> <span style="color: #64748b; font-size: 7.8pt;">(Roll: 24550334)</span></td><td style="border: none; padding: 2px 0; text-align: right; color: #475569;">Full Stack Developer</td></tr>
+</table>
+<div style="margin-top: 5px; font-size: 8pt; color: #64748b; text-align: right; border-top: 1px solid #e2e8f0; padding-top: 3px;">
+        Bachelor of Computer Applications (BCA) • Semester V • 2026–2027
+      </div>
+</div>
+</div>
+</div>
+<div class="prelim-page" style="page-break-inside: avoid; page-break-after: always;">
+<div class="prelim-title" style="margin-top: 0; margin-bottom: 4px;">CERTIFICATE OF APPROVAL</div>
+<div class="prelim-divider" style="margin-top: 4px; margin-bottom: 12px;"></div>
+<p style="font-size: 9.5pt; line-height: 1.4; margin: 4px 0;">This is to certify that the institutional internship report titled <strong>“Design and Implementation of PhantmOS: A Distributed AI Job Discovery and Resume-Synthesis Platform Using Self-Hosted Model Inference”</strong> has been successfully completed by the following student team during the academic session 2026–2027:</p>
+<table style="width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 8.2pt;">
+<thead>
+<tr style="background-color: #f8fafc; border-bottom: 1.5px solid #0f172a;">
+<th style="padding: 3.5px 5px; text-align: left; width: 5%;">#</th>
+<th style="padding: 3.5px 5px; text-align: left; width: 27%;">Student Name</th>
+<th style="padding: 3.5px 5px; text-align: left; width: 16%;">Enrollment No.</th>
+<th style="padding: 3.5px 5px; text-align: left; width: 14%;">Roll No.</th>
+<th style="padding: 3.5px 5px; text-align: left; width: 18%;">Project Role</th>
+<th style="padding: 3.5px 5px; text-align: left; width: 20%;">Specialization Focus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="padding: 3px 5px; text-align: left;">1</td>
+<td style="padding: 3px 5px; text-align: left;"><strong>Akash Yaduwanshi</strong></td>
+<td style="padding: 3px 5px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 7.8pt;">DX2411135</td>
+<td style="padding: 3px 5px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 7.8pt;">24550306</td>
+<td style="padding: 3px 5px; text-align: left;">Team Leader</td>
+<td style="padding: 3px 5px; text-align: left;">Core Architecture &amp; Neural Inference</td>
+</tr>
+<tr>
+<td style="padding: 3px 5px; text-align: left;">2</td>
+<td style="padding: 3px 5px; text-align: left;"><strong>Ali Ahmad Raza Sheikh</strong></td>
+<td style="padding: 3px 5px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 7.8pt;">DX2411140</td>
+<td style="padding: 3px 5px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 7.8pt;">24550307</td>
+<td style="padding: 3px 5px; text-align: left;">Team Manager</td>
+<td style="padding: 3px 5px; text-align: left;">Cluster Infrastructure &amp; Network Mesh</td>
+</tr>
+<tr>
+<td style="padding: 3px 5px; text-align: left;">3</td>
+<td style="padding: 3px 5px; text-align: left;"><strong>Onkar Dubey</strong></td>
+<td style="padding: 3px 5px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 7.8pt;">DX2411458</td>
+<td style="padding: 3px 5px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 7.8pt;">24550342</td>
+<td style="padding: 3px 5px; text-align: left;">Frontend Developer</td>
+<td style="padding: 3px 5px; text-align: left;">Frontend Architecture &amp; UI/UX System</td>
+</tr>
+<tr>
+<td style="padding: 3px 5px; text-align: left;">4</td>
+<td style="padding: 3px 5px; text-align: left;"><strong>Krishnapal Singh Chawda</strong></td>
+<td style="padding: 3px 5px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 7.8pt;">DX2411365</td>
+<td style="padding: 3px 5px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 7.8pt;">24550330</td>
+<td style="padding: 3px 5px; text-align: left;">Frontend Developer</td>
+<td style="padding: 3px 5px; text-align: left;">Interactive Components &amp; Telemetry UI</td>
+</tr>
+<tr>
+<td style="padding: 3px 5px; text-align: left;">5</td>
+<td style="padding: 3px 5px; text-align: left;"><strong>Pankaj Badoliya</strong></td>
+<td style="padding: 3px 5px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 7.8pt;">DX2411464</td>
+<td style="padding: 3px 5px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 7.8pt;">24550343</td>
+<td style="padding: 3px 5px; text-align: left;">Backend Developer</td>
+<td style="padding: 3px 5px; text-align: left;">Data Harvesting &amp; Database Schemas</td>
+</tr>
+<tr>
+<td style="padding: 3px 5px; text-align: left;">6</td>
+<td style="padding: 3px 5px; text-align: left;"><strong>Anushruti Jain</strong></td>
+<td style="padding: 3px 5px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 7.8pt;">DX2411187</td>
+<td style="padding: 3px 5px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 7.8pt;">24550313</td>
+<td style="padding: 3px 5px; text-align: left;">Backend Developer</td>
+<td style="padding: 3px 5px; text-align: left;">FastAPI Microservices &amp; PDF Factory</td>
+</tr>
+<tr>
+<td style="padding: 3px 5px; text-align: left;">7</td>
+<td style="padding: 3px 5px; text-align: left;"><strong>Mod Uwesh Khan Multani</strong></td>
+<td style="padding: 3px 5px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 7.8pt;">DX2411408</td>
+<td style="padding: 3px 5px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 7.8pt;">24550334</td>
+<td style="padding: 3px 5px; text-align: left;">Full Stack Developer</td>
+<td style="padding: 3px 5px; text-align: left;">Multi-Agent System &amp; Telegram Bot</td>
+</tr>
+</tbody>
+</table>
+<p style="font-size: 9pt; line-height: 1.35; margin: 4px 0;">Submitted in partial fulfillment of the curriculum requirements for the degree of <strong>Bachelor of Computer Applications (BCA)</strong>, Semester V, at <strong>Government Holkar (Model Autonomous) Science College, Indore (M.P.)</strong>.</p>
+<p style="font-size: 9pt; line-height: 1.35; margin: 4px 0;">The internship was carried out in two structured parts: <strong>Phase I (5 September – 10 October 2026)</strong> in the college computer lab working daily from 10:00 AM to 4:00 PM (6 hours per day) setting up the <strong>ClusterOS</strong> virtualization environment on physical workstations; and <strong>Phase II (11 October – 1 November 2026)</strong> through regular collaborative sessions on Google Meet developing the <strong>PhantmOS</strong> multi-agent platform, resume engine, and Telegram bot.</p>
+<p style="font-size: 9pt; line-height: 1.35; margin: 4px 0;">The students have completed <strong>more than 90 hours</strong> of required training, clocking a total of <strong>270 documented hours</strong> (150 hours in the college lab and 120 hours in remote collaborative engineering at 6 hours per day). The report has been examined and approved for semester evaluation.</p>
+<div style="margin-top: 18px;">
+<div class="signature-row" style="margin-top: 14px; font-size: 9pt;">
+<div class="sig-block">
+<div class="sig-line" style="margin-top: 25px; padding-top: 4px;">
+          Prof. Manish Singh<br/>
+<span style="font-weight:400; font-size:8.5pt;">Project Guide &amp; Mentor<br/>Department of CS &amp; IT</span>
+</div>
+</div>
+<div class="sig-block">
+<div class="sig-line" style="margin-top: 25px; padding-top: 4px;">
+          Dr. Pradeep Sharma<br/>
+<span style="font-weight:400; font-size:8.5pt;">Head of Department<br/>Department of CS &amp; IT</span>
+</div>
+</div>
+</div>
+<div class="signature-row" style="margin-top: 18px; font-size: 9pt;">
+<div class="sig-block" style="width:100%; text-align:center;">
+<div class="sig-line" style="width: 48%; margin: 0 auto; padding-top: 4px; margin-top: 20px;">
+          External Examiner Signature &amp; Date
+        </div>
+</div>
+</div>
+</div>
+</div>
+<div class="prelim-page" style="page-break-inside: avoid; page-break-after: always;">
+<div class="prelim-title" style="margin-top: 0; margin-bottom: 4px;">JOINT STUDENT DECLARATION</div>
+<div class="prelim-divider" style="margin-top: 4px; margin-bottom: 12px;"></div><p style="font-size: 10.5pt; line-height: 1.45; margin: 6px 0;">We, the undersigned students of Bachelor of Computer Applications (BCA), Semester V, Government Holkar (Model Autonomous) Science College, Indore, declare that this institutional internship report titled <strong>“Design and Implementation of PhantmOS: A Distributed AI Job Discovery and Resume-Synthesis Platform Using Self-Hosted Model Inference”</strong> is an authentic and original record of our work. We completed this internship between <strong>5 September 2026 and 1 November 2026</strong> under the guidance of our project mentor <strong>Prof. Manish Singh</strong> and Head of Department <strong>Dr. Pradeep Sharma</strong>.</p><p style="font-size: 10pt; line-height: 1.4; margin: 5px 0;">Our work was carried out across two practical phases: <strong>Phase I (5 Sep – 10 Oct 2026)</strong> in the college computer lab working daily from 10:00 AM to 4:00 PM (6 hours per day), where we configured three HP desktop computers into a local cluster called <strong>ClusterOS</strong> using Linux KVM, libvirt, and WireGuard to host AI models locally; and <strong>Phase II (11 Oct – 1 Nov 2026)</strong> through daily online meetings on Google Meet (6 hours per day), where we engineered the <strong>PhantmOS</strong> multi-agent platform, Typst resume builder, and Telegram bot.</p><p style="font-size: 10pt; line-height: 1.4; margin: 6px 0; background: #f8fafc; padding: 6px 10px; border-left: 3px solid #0284c7; border-radius: 3px;"><strong>Internship Hours Completed:</strong> As required by the curriculum, each member of our team completed <strong>more than 90 hours</strong> of mandatory practical training. In total, our team logged <strong>270 documented working hours</strong> across the 8-week internship period (comprising <strong>150 hours</strong> of on-campus laboratory clustering in Phase I, and <strong>120 hours</strong> of collaborative software development in Phase II).</p><p style="font-size: 9.5pt; line-height: 1.4; margin: 5px 0;">We also confirm that this work is original and has not been submitted previously for any other degree or diploma at this or any other academic institution.</p>
+
+
+
+
+<div style="margin-top: 14px;">
+<table style="width: 100%; border-collapse: collapse; border: none; font-size: 8.5pt; background: transparent;">
+<tr style="background: transparent;">
+<td style="width: 50%; border: none; padding: 5px 8px; vertical-align: bottom;">
+<div style="border-top: 1.5px solid #0f172a; padding-top: 3px; width: 88%;">
+<strong>Akash Yaduwanshi</strong><br/>
+<span style="font-size: 7.8pt; color: #475569;">Team Leader • Roll: 24550306 • Enr: DX2411135</span>
+</div>
+</td>
+<td style="width: 50%; border: none; padding: 5px 8px; vertical-align: bottom;">
+<div style="border-top: 1.5px solid #0f172a; padding-top: 3px; width: 88%;">
+<strong>Ali Ahmad Raza Sheikh</strong><br/>
+<span style="font-size: 7.8pt; color: #475569;">Team Manager • Roll: 24550307 • Enr: DX2411140</span>
+</div>
+</td>
+</tr>
+<tr style="background: transparent;">
+<td style="width: 50%; border: none; padding: 5px 8px; vertical-align: bottom;">
+<div style="border-top: 1.5px solid #0f172a; padding-top: 3px; width: 88%;">
+<strong>Onkar Dubey</strong><br/>
+<span style="font-size: 7.8pt; color: #475569;">Frontend Developer • Roll: 24550342 • Enr: DX2411458</span>
+</div>
+</td>
+<td style="width: 50%; border: none; padding: 5px 8px; vertical-align: bottom;">
+<div style="border-top: 1.5px solid #0f172a; padding-top: 3px; width: 88%;">
+<strong>Krishnapal Singh Chawda</strong><br/>
+<span style="font-size: 7.8pt; color: #475569;">Frontend Developer • Roll: 24550330 • Enr: DX2411365</span>
+</div>
+</td>
+</tr>
+<tr style="background: transparent;">
+<td style="width: 50%; border: none; padding: 5px 8px; vertical-align: bottom;">
+<div style="border-top: 1.5px solid #0f172a; padding-top: 3px; width: 88%;">
+<strong>Pankaj Badoliya</strong><br/>
+<span style="font-size: 7.8pt; color: #475569;">Backend Developer • Roll: 24550343 • Enr: DX2411464</span>
+</div>
+</td>
+<td style="width: 50%; border: none; padding: 5px 8px; vertical-align: bottom;">
+<div style="border-top: 1.5px solid #0f172a; padding-top: 3px; width: 88%;">
+<strong>Anushruti Jain</strong><br/>
+<span style="font-size: 7.8pt; color: #475569;">Backend Developer • Roll: 24550313 • Enr: DX2411187</span>
+</div>
+</td>
+</tr>
+<tr style="background: transparent;">
+<td colspan="2" style="width: 50%; border: none; padding: 5px 8px; vertical-align: bottom;">
+<div style="border-top: 1.5px solid #0f172a; padding-top: 3px; width: 44%;">
+<strong>Mod Uwesh Khan Multani</strong><br/>
+<span style="font-size: 7.8pt; color: #475569;">Full Stack Developer • Roll: 24550334 • Enr: DX2411408</span>
+</div>
+</td>
+</tr>
+</table>
+<div style="margin-top: 8px; font-size: 8.5pt; color: #64748b;">
+      Govt. Holkar (Model Autonomous) Science College, Indore
+    </div>
+</div>
+</div>
+<div class="prelim-page" style="page-break-inside: avoid; page-break-after: always;">
+<div class="prelim-title" style="margin-top: 0; margin-bottom: 4px;">ACKNOWLEDGEMENT</div>
+<div class="prelim-divider" style="margin-top: 4px; margin-bottom: 12px;"></div><p style="font-size: 11pt; line-height: 1.5; margin: 8px 0;">We express our sincere thanks to <strong>Dr. Pradeep Sharma</strong>, Professor &amp; Head of Department of Computer Science &amp; IT, for granting us permission to use the college computer lab and hardware workstations. His administrative approval and guidance made it possible for us to build and test our physical virtualization cluster during Phase I.</p><p style="font-size: 11pt; line-height: 1.5; margin: 8px 0;">We are deeply grateful to our project mentor, <strong>Prof. Manish Singh</strong>, for his continuous technical guidance, helpful feedback, and encouragement throughout the design and implementation of both ClusterOS and PhantmOS.</p><p style="font-size: 11pt; line-height: 1.5; margin: 8px 0;">This report represents the teamwork of our seven-member cohort across both phases of our internship: working daily in the college lab from 10:00 AM to 4:00 PM (6 hours per day) during Phase I, and collaborating daily over Google Meet (6 hours per day) during Phase II. Every member contributed actively to their assigned areas:</p><ul style="font-size: 10.5pt; line-height: 1.5; margin: 6px 0 10px 18px;">
+<li><strong>Akash Yaduwanshi (Team Leader):</strong> Overall system architecture, AI model selection, BGE embeddings, and reranker performance.</li>
+<li><strong>Ali Ahmad Raza Sheikh (Team Manager):</strong> Cluster setup, WireGuard network mesh, and team sprint milestones.</li>
+<li><strong>Onkar Dubey (Frontend Developer):</strong> UI design, React 19 web application, and layout styling.</li>
+<li><strong>Krishnapal Singh Chawda (Frontend Developer):</strong> Job search interface, live telemetry dashboard, and charts.</li>
+<li><strong>Pankaj Badoliya (Backend Developer):</strong> Job data harvesting, API connectors, and duplicate filtering.</li>
+<li><strong>Anushruti Jain (Backend Developer):</strong> FastAPI microservices, Supabase database schemas, and Typst resume generation.</li>
+<li><strong>Mod Uwesh Khan Multani (Full Stack Developer):</strong> Multi-agent coordination, Telegram bot alerts, and end-to-end testing.</li>
+</ul><p style="font-size: 10.5pt; line-height: 1.5; margin: 8px 0;">We also thank the open-source community behind Linux, KVM, WireGuard, FastAPI, React, and Supabase for providing the dependable tools that made this work possible.</p>
+
+
+
+
+<ul style="margin: 4px 0 6px 18px; padding-left: 0; font-size: 8.8pt; line-height: 1.35;">
+<li style="margin-bottom: 2px;"><strong>Ali Ahmad Raza Sheikh</strong> (Team Manager) – Cluster topology, WireGuard mesh routing, and inter-team execution milestones.</li>
+<li style="margin-bottom: 2px;"><strong>Akash Yaduwanshi</strong> (Team Leader) – Core architecture, neural model selection, BGE embeddings, and cross-attention reranking latencies.</li>
+<li style="margin-bottom: 2px;"><strong>Onkar Dubey</strong> (Frontend Developer) – UI/UX design language, reactive TanStack Start &amp; React 19 component hierarchy, and unified state.</li>
+<li style="margin-bottom: 2px;"><strong>Krishnapal Singh Chawda</strong> (Frontend Developer) – Interactive job discovery workflows, real-time telemetry dashboards, and visual charts.</li>
+<li style="margin-bottom: 2px;"><strong>Pankaj Badoliya</strong> (Backend Developer) – Multi-source job harvesting engines, asynchronous data ingestion queues, and SHA-256 deduplication.</li>
+<li style="margin-bottom: 2px;"><strong>Anushruti Jain</strong> (Backend Developer) – FastAPI microservice endpoints, Supabase PostgreSQL schemas, RLS policies, and Typst PDF compilation.</li>
+<li style="margin-bottom: 2px;"><strong>Mod Uwesh Khan Multani</strong> (Full Stack Developer) – Multi-agent orchestration loop, Telegram bot C2 command center, and end-to-end telemetry.</li>
+</ul>
+
+<div style="margin-top: 16px; text-align: right; font-size: 9.5pt;">
+<strong>The PhantmOS Project Team</strong><br/>
+<span style="font-size: 8.5pt; color: #475569;">Akash Yaduwanshi • Ali Ahmad Raza Sheikh • Onkar Dubey • Krishnapal Singh Chawda<br/>Pankaj Badoliya • Anushruti Jain • Mod Uwesh Khan Multani<br/>BCA Semester V • Session 2026–2027</span>
+</div>
+</div>
+<div class="prelim-page" style="page-break-inside: avoid; page-break-after: always;">
+<div class="prelim-title" style="margin-top: 0; margin-bottom: 4px;">ABSTRACT</div>
+<div class="prelim-divider" style="margin-top: 4px; margin-bottom: 12px;"></div><p style="font-size: 11pt; line-height: 1.5; margin: 8px 0;">Finding entry-level software jobs and internships is challenging for undergraduate students. Most commercial job boards use generic keyword search that fails to match a candidate's actual coursework and skills, while automated Applicant Tracking Systems (ATS) silently reject resumes if formatting or keywords do not match. At the same time, using commercial cloud AI tools for every resume and search query introduces recurring subscription costs and exposes private student resume data to external services.</p><p style="font-size: 11pt; line-height: 1.5; margin: 8px 0;">This report presents <strong>PhantmOS</strong>, an automated platform designed to simplify the student job search. PhantmOS combines an interactive web interface with a self-hosted three-node Linux cluster called <strong>ClusterOS</strong>. The platform harvests job postings from platforms like Arbeitnow, Remotive, and Google Serp API, uses AI embeddings (BGE-small-en-v1.5) and BM25 search to find relevant openings, ranks them using an attention-based reranker (bge-reranker-base), and creates truthful, ATS-optimized resumes using Typst. It also delivers instant job alerts to the student's mobile device via Telegram.</p><p style="font-size: 11pt; line-height: 1.5; margin: 8px 0;">To keep the project free to run, AI models run locally on three HP laboratory computers (Intel Core i5-10210U, 8 GB RAM per host, 24 GB aggregate cluster fabric) running Ubuntu 24.04 connected through a secure WireGuard network. In benchmark tests, local inference delivered response times under 70 milliseconds, providing fast search results with zero cloud subscription fees and complete student data privacy.</p>
+
+
+
+</div>
+<div class="prelim-page-toc">
+<div class="main-toc-header">TABLE OF CONTENTS</div>
+<div class="main-toc-divider"></div>
+<div class="toc-container">
+<table class="main-toc-table">
+<tr><td class="toc-title">Certificate of Approval</td><td class="toc-dots"></td><td class="toc-page">2</td></tr>
+<tr><td class="toc-title">Student Declaration</td><td class="toc-dots"></td><td class="toc-page">3</td></tr>
+<tr><td class="toc-title">Acknowledgement</td><td class="toc-dots"></td><td class="toc-page">4</td></tr>
+<tr><td class="toc-title">Abstract</td><td class="toc-dots"></td><td class="toc-page">5</td></tr>
+<tr><td class="toc-title">List of Figures</td><td class="toc-dots"></td><td class="toc-page">9</td></tr>
+<tr><td class="toc-title">List of Tables</td><td class="toc-dots"></td><td class="toc-page">10</td></tr>
+<tr><td class="toc-title">List of Abbreviations and Acronyms</td><td class="toc-dots"></td><td class="toc-page">11</td></tr>
+<tr><td class="toc-title toc-chapter">1. INTRODUCTION: Problem Background &amp; Motivation</td><td class="toc-dots"></td><td class="toc-page">12</td></tr>
+<tr><td class="toc-title toc-sub">1.3 Project Aim &amp; Engineering Objectives</td><td class="toc-dots"></td><td class="toc-page">13</td></tr>
+<tr><td class="toc-title toc-sub">1.5 Scope, Delimitations &amp; Institutional Significance</td><td class="toc-dots"></td><td class="toc-page">14</td></tr>
+<tr><td class="toc-title toc-sub">1.7 Project Genesis, Phased Development &amp; Team Synergy</td><td class="toc-dots"></td><td class="toc-page">15</td></tr>
+<tr><td class="toc-title toc-chapter">2. OBJECTIVES, REQUIREMENTS &amp; METHODOLOGY: Functional Matrix</td><td class="toc-dots"></td><td class="toc-page">16</td></tr>
+<tr><td class="toc-title toc-sub">2.2 Non-Functional Requirements &amp; Performance SLA Benchmarks</td><td class="toc-dots"></td><td class="toc-page">17</td></tr>
+<tr><td class="toc-title toc-sub">2.3 Engineering Methodology &amp; Evaluation Framework</td><td class="toc-dots"></td><td class="toc-page">18</td></tr>
+<tr><td class="toc-title toc-sub">2.5 Engineering Team Structure &amp; Technical Workload Distribution</td><td class="toc-dots"></td><td class="toc-page">19</td></tr>
+<tr><td class="toc-title toc-chapter">3. TECHNICAL BACKGROUND: Virtualisation Infrastructure &amp; Mesh</td><td class="toc-dots"></td><td class="toc-page">20</td></tr>
+<tr><td class="toc-title toc-sub">3.4 BM25, Reciprocal Rank Fusion &amp; Cross-Encoder Reranking</td><td class="toc-dots"></td><td class="toc-page">21</td></tr>
+<tr><td class="toc-title toc-sub">3.5 Docker Containerisation &amp; Hugging Face Spaces Deployment</td><td class="toc-dots"></td><td class="toc-page">22</td></tr>
+<tr><td class="toc-title toc-chapter">4. INTEGRATED SYSTEM ARCHITECTURE: Deployment Topology &amp; Stack</td><td class="toc-dots"></td><td class="toc-page">23</td></tr>
+<tr><td class="toc-title toc-sub">4.3 End-to-End Autonomous Data Flow Pipeline</td><td class="toc-dots"></td><td class="toc-page">24</td></tr>
+<tr><td class="toc-title toc-sub">4.4 Integration Boundary: Cloud Space &amp; Physical Cluster Mesh</td><td class="toc-dots"></td><td class="toc-page">25</td></tr>
+<tr><td class="toc-title toc-sub">4.5 Implementation Languages, Libraries &amp; Software Stack</td><td class="toc-dots"></td><td class="toc-page">26</td></tr>
+</table>
+</div>
+</div>
+<div class="page-break"></div>
+<div class="prelim-page-toc">
+<div class="main-toc-header">TABLE OF CONTENTS (CONTINUED)</div>
+<div class="main-toc-divider"></div>
+<div class="toc-container">
+<table class="main-toc-table">
+<tr><td class="toc-title toc-chapter">5. VIRTUALISATION CLUSTER: Physical Environment &amp; VM Sizing</td><td class="toc-dots"></td><td class="toc-page">29</td></tr>
+<tr><td class="toc-title toc-sub">5.3 Mesh Network Topology &amp; Point-to-Point Routing</td><td class="toc-dots"></td><td class="toc-page">30</td></tr>
+<tr><td class="toc-title toc-sub">5.4 Implementation of the Virtualisation Environment</td><td class="toc-dots"></td><td class="toc-page">31</td></tr>
+<tr><td class="toc-title toc-sub">5.5 Model-Serving Microservices Architecture</td><td class="toc-dots"></td><td class="toc-page">32</td></tr>
+<tr><td class="toc-title toc-sub">5.6 Remote Administration &amp; Out-of-Band Cluster Control</td><td class="toc-dots"></td><td class="toc-page">33</td></tr>
+<tr><td class="toc-title toc-sub">5.7 Infrastructure Constraints &amp; Hardware Mitigations</td><td class="toc-dots"></td><td class="toc-page">34</td></tr>
+<tr><td class="toc-title toc-chapter">6. PHANTMOS APPLICATION DESIGN: Multi-Agent Architecture</td><td class="toc-dots"></td><td class="toc-page">35</td></tr>
+<tr><td class="toc-title toc-sub">6.2 Automated Job Discovery &amp; Multi-Stage Hybrid Retrieval</td><td class="toc-dots"></td><td class="toc-page">36</td></tr>
+<tr><td class="toc-title toc-sub">6.4 Composite Relevance Scoring &amp; Classification Thresholds</td><td class="toc-dots"></td><td class="toc-page">38</td></tr>
+<tr><td class="toc-title toc-sub">6.5 Resume Synthesis &amp; ATS Document Generation</td><td class="toc-dots"></td><td class="toc-page">39</td></tr>
+<tr><td class="toc-title toc-sub">6.6 Data Persistence, Caching &amp; Frontend Student Workflow</td><td class="toc-dots"></td><td class="toc-page">41</td></tr>
+<tr><td class="toc-title toc-sub">6.8 Telegram Bot Command-and-Control &amp; Mobile Job Radar</td><td class="toc-dots"></td><td class="toc-page">43</td></tr>
+<tr><td class="toc-title toc-chapter">7. DOCKER DEPLOYMENT: Containerisation &amp; Cloud Space Ingress</td><td class="toc-dots"></td><td class="toc-page">44</td></tr>
+<tr><td class="toc-title toc-sub">7.3 OpenAPI Service Contract &amp; Schema Specifications</td><td class="toc-dots"></td><td class="toc-page">45</td></tr>
+<tr><td class="toc-title toc-sub">7.4 Operational Cost &amp; Student Concurrency Capacity</td><td class="toc-dots"></td><td class="toc-page">46</td></tr>
+<tr><td class="toc-title toc-chapter">8. TESTING, RESULTS &amp; DISCUSSION: Infrastructure Verification</td><td class="toc-dots"></td><td class="toc-page">47</td></tr>
+<tr><td class="toc-title toc-sub">8.2 Model Serving Latency &amp; Neural Retrieval Benchmarks</td><td class="toc-dots"></td><td class="toc-page">48</td></tr>
+<tr><td class="toc-title toc-sub">8.3 Static Analysis, Type Safety &amp; Integration Test Suite</td><td class="toc-dots"></td><td class="toc-page">49</td></tr>
+<tr><td class="toc-title toc-sub">8.5 Results Discussion, Verification Evidence &amp; Findings</td><td class="toc-dots"></td><td class="toc-page">50</td></tr>
+</table>
+</div>
+</div>
+<div class="page-break"></div>
+<div class="prelim-page-toc">
+<div class="main-toc-header">TABLE OF CONTENTS (CONTINUED)</div>
+<div class="main-toc-divider"></div>
+<div class="toc-container">
+<table class="main-toc-table">
+<tr><td class="toc-title toc-chapter">9. SECURITY, RELIABILITY &amp; LIMITATIONS: Multi-Tenant Isolation</td><td class="toc-dots"></td><td class="toc-page">52</td></tr>
+<tr><td class="toc-title toc-sub">9.5 Priority Security Findings, Remediations &amp; Limitations</td><td class="toc-dots"></td><td class="toc-page">53</td></tr>
+<tr><td class="toc-title toc-chapter">10. FUTURE ENHANCEMENTS: Model Scaling &amp; Campus Rollout</td><td class="toc-dots"></td><td class="toc-page">54</td></tr>
+<tr><td class="toc-title toc-chapter">11. CONCLUSION</td><td class="toc-dots"></td><td class="toc-page">55</td></tr>
+<tr><td class="toc-title toc-chapter">REFERENCES</td><td class="toc-dots"></td><td class="toc-page">56</td></tr>
+<tr><td class="toc-title toc-chapter">APPENDIX A. INFRASTRUCTURE INVENTORY</td><td class="toc-dots"></td><td class="toc-page">58</td></tr>
+<tr><td class="toc-title toc-chapter">APPENDIX B. INTEGRATION VERIFICATION PLAN &amp; LOGS</td><td class="toc-dots"></td><td class="toc-page">59</td></tr>
+<tr><td class="toc-title toc-chapter">APPENDIX C. RECOMMENDED OPERATIONAL COMMANDS</td><td class="toc-dots"></td><td class="toc-page">60</td></tr>
+<tr><td class="toc-title toc-sub">C.3 Model Microservices REST API Diagnostic Commands</td><td class="toc-dots"></td><td class="toc-page">61</td></tr>
+</table>
+</div>
+</div>
+<div class="page-break"></div>
+<div class="prelim-page-toc">
+<div class="main-toc-header">LIST OF FIGURES</div>
+<div class="main-toc-divider"></div>
+<table class="main-toc-table">
+<tr><td class="toc-title">Figure 1. Bi-Encoder Semantic Search vs. Cross-Encoder Deep Attention Architecture</td><td class="toc-dots"></td><td class="toc-page">22</td></tr>
+<tr><td class="toc-title">Figure 2. Integrated PhantmOS System Architecture and Deployment Topology</td><td class="toc-dots"></td><td class="toc-page">23</td></tr>
+<tr><td class="toc-title">Figure 3. End-to-End Autonomous Job Discovery and Application Flow</td><td class="toc-dots"></td><td class="toc-page">25</td></tr>
+<tr><td class="toc-title">Figure 4. PhantmOS Production Web Dashboard (Home Overview &amp; Live Matches)</td><td class="toc-dots"></td><td class="toc-page">26</td></tr>
+<tr><td class="toc-title">Figure 4B. PhantmOS Job Discovery Engine Interface</td><td class="toc-dots"></td><td class="toc-page">36</td></tr>
+<tr><td class="toc-title">Figure 5. Three-Node Physical Cluster and Routed VM Network Topology</td><td class="toc-dots"></td><td class="toc-page">31</td></tr>
+<tr><td class="toc-title">Figure 6. Virtualisation Cluster Implementation, Mesh Routing, and Subnet Architecture</td><td class="toc-dots"></td><td class="toc-page">31</td></tr>
+<tr><td class="toc-title">Figure 6B. ClusterOS KVM / Libvirt Control Center &amp; Compute Fabric Interface</td><td class="toc-dots"></td><td class="toc-page">32</td></tr>
+<tr><td class="toc-title">Figure 6C. ClusterOS Virtual Machines Matrix &amp; Host Orchestration Control Center</td><td class="toc-dots"></td><td class="toc-page">33</td></tr>
+<tr><td class="toc-title">Figure 7. Physical Cluster Linux Terminal Monitoring Console (Ubuntu 24.04 CLI)</td><td class="toc-dots"></td><td class="toc-page">34</td></tr>
+<tr><td class="toc-title">Figure 8. Multi-Stage Hybrid Retrieval and Cross-Encoder Reranking Pipeline</td><td class="toc-dots"></td><td class="toc-page">36</td></tr>
+<tr><td class="toc-title">Figure 8B. PhantmOS Multi-Agent Autonomous Pipeline Workflow</td><td class="toc-dots"></td><td class="toc-page">38</td></tr>
+<tr><td class="toc-title">Figure 9. Composite Relevance Scoring Flow and Classification Threshold Bands</td><td class="toc-dots"></td><td class="toc-page">38</td></tr>
+<tr><td class="toc-title">Figure 10. Multi-Provider LLM Fallback Chain for Resume Synthesis &amp; PDF Generation</td><td class="toc-dots"></td><td class="toc-page">40</td></tr>
+<tr><td class="toc-title">Figure 10B. PhantmOS Command Center &amp; System Preferences</td><td class="toc-dots"></td><td class="toc-page">41</td></tr>
+<tr><td class="toc-title">Figure 11. Live ATS Resume Synthesizer &amp; Competency Matcher Interface</td><td class="toc-dots"></td><td class="toc-page">42</td></tr>
+<tr><td class="toc-title">Figure 11B. PhantmOS Company Intelligence Interface</td><td class="toc-dots"></td><td class="toc-page">41</td></tr>
+<tr><td class="toc-title">Figure 12. Container Deployment Topology on Hugging Face Spaces Platform</td><td class="toc-dots"></td><td class="toc-page">44</td></tr>
+<tr><td class="toc-title">Figure 13. Hugging Face Spaces Deployment Topology and External Service Boundaries</td><td class="toc-dots"></td><td class="toc-page">45</td></tr>
+<tr><td class="toc-title">Figure 14. FastAPI Microservices OpenAPI Interactive Documentation UI (Swagger /docs)</td><td class="toc-dots"></td><td class="toc-page">46</td></tr>
+<tr><td class="toc-title">Figure 15. Physical Cluster Inference Telemetry &amp; Latency Dashboard (Grafana Telemetry)</td><td class="toc-dots"></td><td class="toc-page">48</td></tr>
+<tr><td class="toc-title">Figure 16. System Integration, Unit Testing, and Infrastructure Verification Workflow</td><td class="toc-dots"></td><td class="toc-page">50</td></tr>
+</table>
+</div>
+<div class="prelim-page-toc">
+<div class="main-toc-header">LIST OF TABLES</div>
+<div class="main-toc-divider"></div>
+<table class="main-toc-table">
+<tr><td class="toc-title">Table 1. Functional Requirements Matrix</td><td class="toc-dots"></td><td class="toc-page">16</td></tr>
+<tr><td class="toc-title">Table 2. Non-Functional Engineering Constraints and Service-Level Targets</td><td class="toc-dots"></td><td class="toc-page">17</td></tr>
+<tr><td class="toc-title">Table 2B. Seven-Member Engineering Team Role and Technical Responsibilities</td><td class="toc-dots"></td><td class="toc-page">19</td></tr>
+<tr><td class="toc-title">Table 3. Core Architectural Subsystems and Allocation</td><td class="toc-dots"></td><td class="toc-page">23</td></tr>
+<tr><td class="toc-title">Table 3B. Implementation Languages Across the PhantmOS System</td><td class="toc-dots"></td><td class="toc-page">26</td></tr>
+<tr><td class="toc-title">Table 3C. Core Frameworks, Libraries, and Production Dependencies</td><td class="toc-dots"></td><td class="toc-page">26</td></tr>
+<tr><td class="toc-title">Table 4. Physical Host Specifications across Laboratory Test Cluster</td><td class="toc-dots"></td><td class="toc-page">29</td></tr>
+<tr><td class="toc-title">Table 5. Virtual Machine Allocation and Role Assignment</td><td class="toc-dots"></td><td class="toc-page">29</td></tr>
+<tr><td class="toc-title">Table 6. Cross-Node Routed Subnets and Addressing</td><td class="toc-dots"></td><td class="toc-page">30</td></tr>
+<tr><td class="toc-title">Table 7. Composite Scoring Formula Weights and Tuning Parameters</td><td class="toc-dots"></td><td class="toc-page">38</td></tr>
+<tr><td class="toc-title">Table 8. Recorded Infrastructure Verification Tests and Concrete Outcomes</td><td class="toc-dots"></td><td class="toc-page">47</td></tr>
+<tr><td class="toc-title">Table 8B. Empirical Model-Serving and Retrieval Latency Benchmarks</td><td class="toc-dots"></td><td class="toc-page">48</td></tr>
+<tr><td class="toc-title">Table 9. Recorded Static Analysis, Unit Testing, and Type Safety Results</td><td class="toc-dots"></td><td class="toc-page">49</td></tr>
+<tr><td class="toc-title">Table 10. End-to-End Integration Test Matrix and Execution Outcomes</td><td class="toc-dots"></td><td class="toc-page">49</td></tr>
+<tr><td class="toc-title">Table 11. Priority Security Findings and Implemented Remediations</td><td class="toc-dots"></td><td class="toc-page">52</td></tr>
+<tr><td class="toc-title">Table 12. Complete Laboratory Cluster Infrastructure Inventory</td><td class="toc-dots"></td><td class="toc-page">58</td></tr>
+<tr><td class="toc-title">Table 13. System Release Verification Execution Audit Record</td><td class="toc-dots"></td><td class="toc-page">59</td></tr>
+</table>
+</div>
+<div class="prelim-page-toc">
+<div class="main-toc-header">LIST OF ABBREVIATIONS AND ACRONYMS</div>
+<div class="main-toc-divider"></div>
+<table class="main-toc-table">
+<tr><td class="toc-title" style="width: 20%; font-family: 'Times New Roman', Times, serif; font-weight: 700; color: #0f172a;">API</td><td class="toc-dots"></td><td class="toc-page" style="font-family: 'Cambria', serif; font-weight: 400; text-align: right; color: #334155;">Application Programming Interface</td></tr>
+<tr><td class="toc-title" style="width: 20%; font-family: 'Times New Roman', Times, serif; font-weight: 700; color: #0f172a;">ATS</td><td class="toc-dots"></td><td class="toc-page" style="font-family: 'Cambria', serif; font-weight: 400; text-align: right; color: #334155;">Applicant Tracking System</td></tr>
+<tr><td class="toc-title" style="width: 20%; font-family: 'Times New Roman', Times, serif; font-weight: 700; color: #0f172a;">BCA</td><td class="toc-dots"></td><td class="toc-page" style="font-family: 'Cambria', serif; font-weight: 400; text-align: right; color: #334155;">Bachelor of Computer Applications</td></tr>
+<tr><td class="toc-title" style="width: 20%; font-family: 'Times New Roman', Times, serif; font-weight: 700; color: #0f172a;">BGE</td><td class="toc-dots"></td><td class="toc-page" style="font-family: 'Cambria', serif; font-weight: 400; text-align: right; color: #334155;">BAAI General Embedding (Beijing Academy of Artificial Intelligence)</td></tr>
+<tr><td class="toc-title" style="width: 20%; font-family: 'Times New Roman', Times, serif; font-weight: 700; color: #0f172a;">BM25</td><td class="toc-dots"></td><td class="toc-page" style="font-family: 'Cambria', serif; font-weight: 400; text-align: right; color: #334155;">Best Matching 25 (Probabilistic Information Retrieval Ranking Function)</td></tr>
+<tr><td class="toc-title" style="width: 20%; font-family: 'Times New Roman', Times, serif; font-weight: 700; color: #0f172a;">CLI</td><td class="toc-dots"></td><td class="toc-page" style="font-family: 'Cambria', serif; font-weight: 400; text-align: right; color: #334155;">Command Line Interface</td></tr>
+<tr><td class="toc-title" style="width: 20%; font-family: 'Times New Roman', Times, serif; font-weight: 700; color: #0f172a;">CPU</td><td class="toc-dots"></td><td class="toc-page" style="font-family: 'Cambria', serif; font-weight: 400; text-align: right; color: #334155;">Central Processing Unit</td></tr>
+<tr><td class="toc-title" style="width: 20%; font-family: 'Times New Roman', Times, serif; font-weight: 700; color: #0f172a;">DHCP</td><td class="toc-dots"></td><td class="toc-page" style="font-family: 'Cambria', serif; font-weight: 400; text-align: right; color: #334155;">Dynamic Host Configuration Protocol</td></tr>
+<tr><td class="toc-title" style="width: 20%; font-family: 'Times New Roman', Times, serif; font-weight: 700; color: #0f172a;">HTTP / HTTPS</td><td class="toc-dots"></td><td class="toc-page" style="font-family: 'Cambria', serif; font-weight: 400; text-align: right; color: #334155;">Hypertext Transfer Protocol / Secure</td></tr>
+<tr><td class="toc-title" style="width: 20%; font-family: 'Times New Roman', Times, serif; font-weight: 700; color: #0f172a;">ICMP</td><td class="toc-dots"></td><td class="toc-page" style="font-family: 'Cambria', serif; font-weight: 400; text-align: right; color: #334155;">Internet Control Message Protocol</td></tr>
+<tr><td class="toc-title" style="width: 20%; font-family: 'Times New Roman', Times, serif; font-weight: 700; color: #0f172a;">IP</td><td class="toc-dots"></td><td class="toc-page" style="font-family: 'Cambria', serif; font-weight: 400; text-align: right; color: #334155;">Internet Protocol</td></tr>
+<tr><td class="toc-title" style="width: 20%; font-family: 'Times New Roman', Times, serif; font-weight: 700; color: #0f172a;">JWT</td><td class="toc-dots"></td><td class="toc-page" style="font-family: 'Cambria', serif; font-weight: 400; text-align: right; color: #334155;">JSON Web Token</td></tr>
+<tr><td class="toc-title" style="width: 20%; font-family: 'Times New Roman', Times, serif; font-weight: 700; color: #0f172a;">KVM</td><td class="toc-dots"></td><td class="toc-page" style="font-family: 'Cambria', serif; font-weight: 400; text-align: right; color: #334155;">Kernel-based Virtual Machine</td></tr>
+<tr><td class="toc-title" style="width: 20%; font-family: 'Times New Roman', Times, serif; font-weight: 700; color: #0f172a;">LAN</td><td class="toc-dots"></td><td class="toc-page" style="font-family: 'Cambria', serif; font-weight: 400; text-align: right; color: #334155;">Local Area Network</td></tr>
+<tr><td class="toc-title" style="width: 20%; font-family: 'Times New Roman', Times, serif; font-weight: 700; color: #0f172a;">LLM</td><td class="toc-dots"></td><td class="toc-page" style="font-family: 'Cambria', serif; font-weight: 400; text-align: right; color: #334155;">Large Language Model</td></tr>
+<tr><td class="toc-title" style="width: 20%; font-family: 'Times New Roman', Times, serif; font-weight: 700; color: #0f172a;">NAT</td><td class="toc-dots"></td><td class="toc-page" style="font-family: 'Cambria', serif; font-weight: 400; text-align: right; color: #334155;">Network Address Translation</td></tr>
+<tr><td class="toc-title" style="width: 20%; font-family: 'Times New Roman', Times, serif; font-weight: 700; color: #0f172a;">QEMU</td><td class="toc-dots"></td><td class="toc-page" style="font-family: 'Cambria', serif; font-weight: 400; text-align: right; color: #334155;">Quick Emulator</td></tr>
+<tr><td class="toc-title" style="width: 20%; font-family: 'Times New Roman', Times, serif; font-weight: 700; color: #0f172a;">RLS</td><td class="toc-dots"></td><td class="toc-page" style="font-family: 'Cambria', serif; font-weight: 400; text-align: right; color: #334155;">Row-Level Security</td></tr>
+<tr><td class="toc-title" style="width: 20%; font-family: 'Times New Roman', Times, serif; font-weight: 700; color: #0f172a;">RRF</td><td class="toc-dots"></td><td class="toc-page" style="font-family: 'Cambria', serif; font-weight: 400; text-align: right; color: #334155;">Reciprocal Rank Fusion</td></tr>
+<tr><td class="toc-title" style="width: 20%; font-family: 'Times New Roman', Times, serif; font-weight: 700; color: #0f172a;">RTT</td><td class="toc-dots"></td><td class="toc-page" style="font-family: 'Cambria', serif; font-weight: 400; text-align: right; color: #334155;">Round-Trip Time</td></tr>
+<tr><td class="toc-title" style="width: 20%; font-family: 'Times New Roman', Times, serif; font-weight: 700; color: #0f172a;">SLA</td><td class="toc-dots"></td><td class="toc-page" style="font-family: 'Cambria', serif; font-weight: 400; text-align: right; color: #334155;">Service Level Agreement</td></tr>
+<tr><td class="toc-title" style="width: 20%; font-family: 'Times New Roman', Times, serif; font-weight: 700; color: #0f172a;">SSH</td><td class="toc-dots"></td><td class="toc-page" style="font-family: 'Cambria', serif; font-weight: 400; text-align: right; color: #334155;">Secure Shell</td></tr>
+<tr><td class="toc-title" style="width: 20%; font-family: 'Times New Roman', Times, serif; font-weight: 700; color: #0f172a;">STAR</td><td class="toc-dots"></td><td class="toc-page" style="font-family: 'Cambria', serif; font-weight: 400; text-align: right; color: #334155;">Situation, Task, Action, Result (Behavioral Interview Framework)</td></tr>
+<tr><td class="toc-title" style="width: 20%; font-family: 'Times New Roman', Times, serif; font-weight: 700; color: #0f172a;">UI / UX</td><td class="toc-dots"></td><td class="toc-page" style="font-family: 'Cambria', serif; font-weight: 400; text-align: right; color: #334155;">User Interface / User Experience</td></tr>
+<tr><td class="toc-title" style="width: 20%; font-family: 'Times New Roman', Times, serif; font-weight: 700; color: #0f172a;">vCPU</td><td class="toc-dots"></td><td class="toc-page" style="font-family: 'Cambria', serif; font-weight: 400; text-align: right; color: #334155;">Virtual Central Processing Unit</td></tr>
+<tr><td class="toc-title" style="width: 20%; font-family: 'Times New Roman', Times, serif; font-weight: 700; color: #0f172a;">VM</td><td class="toc-dots"></td><td class="toc-page" style="font-family: 'Cambria', serif; font-weight: 400; text-align: right; color: #334155;">Virtual Machine</td></tr>
+</table>
+</div>
+<div class="page-break"></div>
+<div class="academic-chapter-header" id="chapter-1">
+<div class="academic-chapter-number">CHAPTER 1</div>
+<h2 class="academic-chapter-title">INTRODUCTION</h2>
+<div class="academic-chapter-divider"></div>
+</div>
+<h3 class="section-header" id="sec-1.1">1.1 Background and Real-World Motivation</h3><p>Securing an entry-level software engineering role or technical internship has evolved into an challenging and stressful process for undergraduate students. A typical computer applications student spends dozens of hours each week navigating conventional career portals—predominantly LinkedIn, Indeed, and disparate employer boards. However, rather than providing targeted opportunities, commercial platforms rely on coarse keyword matches and opaque algorithms designed to maximize impressions rather than relevance. Consequently, applicants are inundated with algorithmic spam, "ghost" postings, and automated Applicant Tracking System (ATS) screening walls that silently reject upwards of 75% of submissions within seconds due to minor lexical mismatches or non-standard formatting.</p><p>Overcoming this screening barrier manually requires students to read job descriptions, find required skills, tailor resume points using the STAR (Situation, Task, Action, Result) methodology, and draft customized correspondence—an exhausting workflow demanding 90 to 120 minutes per application. Furthermore, while modern cloud AI services offer drafting capabilities, relying on commercial proprietary APIs introduces steep per-query subscription fees, risks student data exposure, and creates vendor lock-in. Recognizing this common difficulties firsthand, our seven-member undergraduate engineering cohort undertook an institutional curriculum internship sanctioned by <strong>Government Holkar (Model Autonomous) Science College, Indore</strong>, spanning from <strong>5 September 2026 to 1 November 2026</strong> (encompassing <strong>270 hrs of documented engineering work</strong>).</p><p>Our objective was to engineer <strong>PhantmOS</strong>—an autonomous, distributed career automation platform that simplifies the traditional job search process. Rather than forcing the candidate to hunt for jobs and tailor documents manually, PhantmOS continuously harvests verified openings across multiple remote sources, performs deep bi-encoder semantic embedding and cross-encoder attention reranking, dynamically synthesizes ATS-optimized resumes via next-generation Typst compilation, and delivers real-time notifications to the candidate's mobile device via <strong>Telegram</strong>. To achieve absolute cost sustainability and data sovereignty, the platform leverages <strong>ClusterOS</strong>—a dedicated, three-node bare-metal virtualization cluster built inside the college computer lab that self-hosts neural inference microservices at zero cloud operational expense.</p>
+<h3 class="section-header" id="sec-1.2">1.2 Problem Statement</h3>
+<p>Modern job seekers and university graduates face a four-fold engineering and procedural crisis when navigating employment markets:</p>
+<ul>
+<li><p><strong>Unchecked Algorithmic Noise and Resume Mismatch on Legacy Boards:</strong> Commercial portals like LinkedIn and Indeed treat job listings as commercial inventory. They rely on coarse keyword matches that fail to evaluate deep semantic equivalence between a student's resume and a job description. Students receive recommendations for senior architect roles or irrelevant non-technical sales positions, wasting valuable preparation time.</p></li>
+<li><p><strong>The Opaque ATS Screening Wall and Keyword Filtering:</strong> Applicant Tracking Systems discard upwards of 75% of candidate submissions before a human recruiter conducts a visual inspection. Resumes formatted in two-column layouts, containing non-standard Unicode glyphs, or lacking specific lexical tokens present in the job description are automatically assigned low relevancy scores. Without role-specific semantic keyword alignment, students face near-universal silent rejection.</p></li>
+<li><p><strong>Severe Application Burnout and Workflow Fragmentation:</strong> Finding a job requires operating across four disconnected environments: job boards for searching, document editors for manual resume tailoring, email clients for outreach, and spreadsheets for tracking. Manually customizing bullet points to reflect individual employer requirements takes up to 2 hours per role. This high friction drastically lowers application velocity and accelerates candidate discouragement.</p></li>
+<li><p><strong>Prohibitive Cloud Inferencing Costs and Student Data Exposure:</strong> Deploying state-of-the-art neural information retrieval (such as dense vector embeddings and cross-encoder token reranking) on commercial cloud inference APIs incurs severe per-token costs ($0.02 to $0.10 per evaluated lead) and exposes sensitive student CVs to third-party commercial data brokers. Educational institutions require a low-cost local computer lab setup.</p></li>
+</ul>
+<p>Solving these interconnected problems requires engineering an end-to-end autonomous operating system that marries private on-premises virtualization infrastructure with an intelligent multi-agent pipeline capable of automated harvesting, semantic matching, truthful STAR resume synthesis, and instant mobile-first delivery.</p>
+<h3 class="section-header" id="sec-1.3">1.3 Aim</h3>
+<p>The primary aim of this project is to design, implement, and validate
+PhantmOS - a distributed, AI-assisted job discovery and resume-synthesis
+platform that links a containerized web portal on Hugging Face Spaces
+with a self-managed, three-node Linux virtualization cluster dedicated
+to low-latency neural embedding and cross-encoder reranking
+inference.</p>
+<h3 class="section-header" id="sec-1.4">1.4 Objectives</h3>
+<p>To accomplish this aim, we established eight practical engineering
+objectives:</p>
+<ul>
+<li><p>Develop Automated Ingestion Connectors: Build modular scrapers to
+harvest job listings from Arbeitnow, Remotive, Google Serp API, and multiple different sources, with automated HTML cleaning, salary field
+standardization, and SHA-256 deduplication.</p></li>
+<li><p>Implement a Hybrid Information Retrieval Pipeline: Combine dense
+vector embeddings (BAAI/bge-small-en-v1.5) with BM25 lexical keyword
+scoring, merging results through Reciprocal Rank Fusion (RRF) to capture
+both semantic context and technical keyword overlap.</p></li>
+<li><p>Deploy Cross-Encoder Reranking: Run BAAI/bge-reranker-base to
+evaluate deep query-candidate cross-attention over the top-50 retrieved
+opportunities, providing accurate relevance scores between 0.0 and
+1.0.</p></li>
+<li><p>Provision a Three-Node KVM/QEMU Virtualization Cluster: Configure
+three Ubuntu physical machines using KVM, QEMU, and libvirt to run
+dedicated virtual machines with stable CPU and memory
+allocations.</p></li>
+<li><p>Establish Secure Inter-Node Mesh Networking: Configure a
+peer-to-peer WireGuard VPN mesh across physical hosts and establish
+persistent IP forwarding between guest subnets to allow seamless
+cross-node API calls.</p></li>
+<li><p>Package and Deploy the Web Application: Containerize the FastAPI
+backend and React frontend into a lightweight Docker image deployed to
+Hugging Face Spaces for zero-setup student web access.</p></li>
+<li><p>Build an ATS Resume Synthesis Studio: Create an on-demand resume
+tailoring engine with a resilient multi-provider LLM cascade (Groq -&gt;
+Google Gemini -&gt; Hugging Face) and automated RenderCV and Typst PDF document
+compilation.</p></li>
+<li><p>Verify System Performance and Security: Empirically test
+end-to-end latency, model throughput, network routing stability, and
+database Row-Level Security (RLS) data isolation.</p></li>
+</ul>
+<h3 class="section-header" id="sec-1.5">1.5 Scope and Delimitations</h3>
+<p>The project scope encompasses both physical infrastructure and
+software engineering:</p>
+<ul>
+<li><p>Infrastructure Scope: Three physical HP 200 Pro G4 All-in-One
+Ubuntu computers, three libvirt KVM virtual machines (2 vCPU, 4 GB RAM
+each), routed virtual subnets (10.60.1.0/24, 10.60.2.0/24,
+10.60.3.0/24), WireGuard mesh tunneling (10.50.0.0/24), and remote
+management via SSH ProxyJump.</p></li>
+<li><p>Application Scope: Source ingestion adapters, hybrid
+vector-lexical search algorithms, cross-encoder reranking microservices,
+composite scoring logic, multi-tier LLM tailoring fallbacks, RenderCV and Typst
+PDF rendering, Supabase PostgreSQL persistence with Row-Level Security,
+and a responsive React 19 / TypeScript / TanStack Start student dashboard.</p></li>
+</ul>
+<p>Project Delimitations: The system is designed for job discovery,
+relevance matching, and resume document preparation; it does not feature
+an autonomous bot that blindly submits applications to external career
+websites without student review. Furthermore, the virtualization cluster
+focuses on cost-effective local compute rather than enterprise-grade
+features such as live VM migration, automated multi-master failover, or
+shared SAN storage arrays.</p>
+<h3 class="section-header" id="sec-1.6">1.6 Significance</h3>
+<p>PhantmOS provides a clear, practical blueprint for educational
+institutions, student developers, and resource-conscious teams aiming to
+deploy cutting-edge AI systems without paying commercial API bills. By
+proving that commodity laboratory computers can be transformed into a
+reliable, self-hosted inference cluster via open-source tools (KVM,
+WireGuard, libvirt), this project bridges the gap between modern cloud
+web applications and private, low-cost distributed computing.</p>
+<h3 class="section-header" id="sec-1.7">1.7 Project Genesis, Institutional Internship Timeline &amp; Phased Execution</h3>
+<p>The engineering of ClusterOS and PhantmOS was conducted as a sanctioned institutional curriculum internship by <strong>Govt. Holkar (Model Autonomous) Science College, Indore</strong>, running from 5 September 2026 to 1 November 2026. The university curriculum mandates <strong>more than 90 hours</strong> of practical work; in total, our seven-member student team logged <strong>270 documented working hours</strong> across two operational phases:</p>
+<ul>
+<li><p><strong>Phase I: 5 September 2026 – 10 October 2026 — In-Lab Physical Infrastructure &amp; Cluster OS Virtualization:</strong> Conducted entirely on-campus within the college computer laboratory, with the team working in-person every day from <strong>10:00 AM to 4:00 PM (6 hours per day, logging 150 hours)</strong>. The team inspected and repurposed three bare-metal HP 200 Pro G4 All-in-One desktop workstations running Ubuntu Linux. Using Linux Kernel-based Virtual Machines (KVM), QEMU emulation, and the <code>libvirt</code> hypervisor daemon, we provisioned isolated virtual machines (<code>vm-p1-test</code>, <code>vm-p2-test</code>, <code>vm-p3</code>) with dedicated vCPU and RAM allocations. To interconnect these nodes across isolated subnets (10.60.1.0/24, 10.60.2.0/24, 10.60.3.0/24), we configured an encrypted peer-to-peer WireGuard mesh network (10.50.0.0/24), achieving an ultra-low inter-node transit latency of 0.36 ms. We deployed self-hosted FastAPI microservices serving BGE-small-en-v1.5 embeddings and BAAI/bge-reranker-base cross-encoders. This on-premises virtualization infrastructure constituted our foundational <strong>Cluster OS</strong>, guaranteeing zero recurring inference costs and total data privacy.</p></li>
+<li><p><strong>Phase II: 11 October 2026 – 1 November 2026 — Remote Collaborative Multi-Agent &amp; Telegram C2 Engineering via Google Meet:</strong> Having secured a cost-free private inference backplane, the team shifted to an intensive remote agile workflow. All seven members connected daily via <strong>Google Meet</strong> for 6 hours per day (logging 120 hours) for synchronous architecture reviews, pair programming, and integration testing. Over these weeks, the team engineered PhantmOS: developing eight specialized autonomous agents (Discovery, Ranking, Research, Resume Synthesis, ATS Verification, PDF Factory, Telegram Delivery, and Feedback), wiring a resilient LLM waterfall (Gemini 2.5 Flash → Groq LLaMA 3.3 70B → Hugging Face), integrating the Typst document compiler backend, crafting a reactive React 19/TanStack Start dark-mode web dashboard, and implementing an interactive Telegram bot command-and-control center with 3-button instant mobile actions. System auditing and integration verification concluded Phase II operations.</p></li>
+</ul>
+<p>Every member of our seven-student cohort—Ali Ahmad Raza Sheikh, Akash Yaduwanshi, Onkar Dubey, Krishnapal Singh Chawda, Pankaj Badoliya, Anushruti Jain, and Mod Uwesh Khan Multani—demonstrated dedication, teamwork, and consistent practical effort across both physical lab and remote collaboration environments.</p>
+<div class="page-break"></div>
+<div class="academic-chapter-header" id="chapter-2">
+<div class="academic-chapter-number">CHAPTER 2</div>
+<h2 class="academic-chapter-title">OBJECTIVES, REQUIREMENTS AND METHODOLOGY</h2>
+<div class="academic-chapter-divider"></div>
+</div>
+<h3 class="section-header" id="sec-2.1">2.1 Functional Requirements</h3>
+<p>The functional requirements define the specific actions, features, and capabilities that the PhantmOS platform provides to students and system services. These requirements are outlined in Table 1.</p>
+<p><strong>Table 1. Functional Requirements</strong></p>
+<table>
+<colgroup>
+<col style="width: 33%"/>
+<col style="width: 33%"/>
+<col style="width: 33%"/>
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Req ID</strong></th>
+<th style="text-align: left;"><strong>Requirement Name</strong></th>
+<th style="text-align: left;"><strong>Engineering Purpose &amp;
+Functionality</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">FR-01</td>
+<td style="text-align: left;">Automated Job Harvesting</td>
+<td style="text-align: left;">Ingest job postings periodically from
+public ATS endpoints (Arbeitnow, Remotive, Google Serp API, and multiple different sources) and aggregator
+APIs.</td>
+</tr>
+<tr>
+<td style="text-align: left;">FR-02</td>
+<td style="text-align: left;">Data Normalization &amp; Cleaning</td>
+<td style="text-align: left;">Strip HTML markup, parse structured
+salary/location fields, and standardize text formatting.</td>
+</tr>
+<tr>
+<td style="text-align: left;">FR-03</td>
+<td style="text-align: left;">Deduplication Engine</td>
+<td style="text-align: left;">Compute SHA-256 hashes of canonical fields
+to prevent duplicate postings from cluttering search results.</td>
+</tr>
+<tr>
+<td style="text-align: left;">FR-04</td>
+<td style="text-align: left;">Hybrid Search Execution</td>
+<td style="text-align: left;">Generate 384-dimensional dense vectors and
+compute BM25 lexical scores against student profile queries.</td>
+</tr>
+<tr>
+<td style="text-align: left;">FR-05</td>
+<td style="text-align: left;">Reciprocal Rank Fusion</td>
+<td style="text-align: left;">Merge dense semantic candidates and BM25
+lexical candidates into a balanced top-50 pool using RRF (k=60).</td>
+</tr>
+<tr>
+<td style="text-align: left;">FR-06</td>
+<td style="text-align: left;">Cross-Encoder Reranking</td>
+<td style="text-align: left;">Pass candidate pairs to
+BAAI/bge-reranker-base to calculate precise all-to-all token attention
+relevance scores.</td>
+</tr>
+<tr>
+<td style="text-align: left;">FR-07</td>
+<td style="text-align: left;">Composite Relevance Scoring</td>
+<td style="text-align: left;">Apply weighted formula (45% semantic, 35%
+keywords, 20% title) and classify jobs into HOT, WARM, COLD,
+REJECT.</td>
+</tr>
+<tr>
+<td style="text-align: left;">FR-08</td>
+<td style="text-align: left;">Truthful Resume Tailoring</td>
+<td style="text-align: left;">Synthesize customized bullet points
+highlighting genuine student skills without inventing fake
+qualifications.</td>
+</tr>
+<tr>
+<td style="text-align: left;">FR-09</td>
+<td style="text-align: left;">ATS-Compliant PDF Generation</td>
+<td style="text-align: left;">Compile tailored resumes into clean,
+machine-readable PDF documents using RenderCV and the Typst compiler.</td>
+</tr>
+<tr>
+<td style="text-align: left;">FR-10</td>
+<td style="text-align: left;">Student Authentication &amp;
+Isolation</td>
+<td style="text-align: left;">Secure user accounts with JWT
+authentication and enforce strict multi-tenant database Row-Level
+Security.</td>
+</tr>
+</tbody>
+</table>
+<h3 class="section-header" id="sec-2.2">2.2 Non-Functional Requirements</h3>
+<p>Non-functional requirements describe the operational qualities, resource limits, response times, and security standards of the system, as shown in Table 2.</p>
+<p><strong>Table 2. Non-Functional Requirements</strong></p>
+<table>
+<colgroup>
+<col style="width: 33%"/>
+<col style="width: 33%"/>
+<col style="width: 33%"/>
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Req ID</strong></th>
+<th style="text-align: left;"><strong>Quality Attribute</strong></th>
+<th style="text-align: left;"><strong>Specification &amp; Verification
+Metric</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">NFR-01</td>
+<td style="text-align: left;">Zero Recurring Inference Cost</td>
+<td style="text-align: left;">All embedding and cross-encoder inference
+must run on local self-hosted VMs to avoid per-token API charges.</td>
+</tr>
+<tr>
+<td style="text-align: left;">NFR-02</td>
+<td style="text-align: left;">Inference Latency Target</td>
+<td style="text-align: left;">Vector embedding generation must complete
+within 25ms, and top-50 reranking must complete within 50ms.</td>
+</tr>
+<tr>
+<td style="text-align: left;">NFR-03</td>
+<td style="text-align: left;">Memory Footprint Control</td>
+<td style="text-align: left;">Model runtimes must fit comfortably within
+4 GB VM allocations without triggering out-of-memory swapping.</td>
+</tr>
+<tr>
+<td style="text-align: left;">NFR-04</td>
+<td style="text-align: left;">Container Maintainability</td>
+<td style="text-align: left;">Application code must build reliably via a
+multi-stage Dockerfile and run unprivileged under non-root user (UID
+1000).</td>
+</tr>
+<tr>
+<td style="text-align: left;">NFR-05</td>
+<td style="text-align: left;">Network Isolation &amp; Security</td>
+<td style="text-align: left;">VM subnets must remain private; cross-node
+traffic must traverse an encrypted WireGuard VPN mesh.</td>
+</tr>
+<tr>
+<td style="text-align: left;">NFR-06</td>
+<td style="text-align: left;">LLM Provider Resilience</td>
+<td style="text-align: left;">The resume generation studio must
+automatically fall back across multiple providers (Groq -&gt; Gemini
+-&gt; HF) upon failure.</td>
+</tr>
+<tr>
+<td style="text-align: left;">NFR-07</td>
+<td style="text-align: left;">Student Data Privacy</td>
+<td style="text-align: left;">Stored resumes and candidate profiles must
+never be accessible across tenant accounts; storage buckets must use
+private URLs.</td>
+</tr>
+<tr>
+<td style="text-align: left;">NFR-08</td>
+<td style="text-align: left;">Cross-Platform Accessibility</td>
+<td style="text-align: left;">The web dashboard must render responsively
+across desktop and mobile browsers without requiring local
+software.</td>
+</tr>
+</tbody>
+</table>
+<h3 class="section-header" id="sec-2.3">2.3 Engineering &amp; Development Methodology</h3>
+<p>To deliver a reliable distributed platform within the institutional internship timeline (5 September 2026 to 1 November 2026), our team employed an agile, phased engineering approach based on hands-on lab work followed by remote collaboration:</p>
+<ul>
+<li><p><strong>Sprint Phase I (5 September 2026 – 22 September 2026 — On-Campus Lab Virtualization, Daily 10:00 AM – 4:00 PM, 6 hrs/day):</strong> Physical hardware testing and virtualization setup (ClusterOS). Work included enabling CPU virtualization extensions (Intel VT-x) in the BIOS, installing Ubuntu Linux across three HP 200 Pro G4 workstations, configuring KVM/QEMU kernel modules, building Linux virtual network bridges (<code>virbr0</code>, <code>br0</code>), configuring an encrypted WireGuard VPN mesh (10.50.0.0/24), and setting up Wake-on-LAN (WoL) and SSH ProxyJump for remote administration.</p></li>
+<li><p><strong>Sprint Phase II (23 September 2026 – 10 October 2026 — Self-Hosted AI Microservices in Lab, Daily 10:00 AM – 4:00 PM, 6 hrs/day):</strong> Deploying lightweight FastAPI inference microservices directly inside KVM virtual machines (<code>vm-p1-test</code>, <code>vm-p2-test</code>, <code>vm-p3</code>). Models loaded included <code>BAAI/bge-small-en-v1.5</code> (384-dimensional dense vectors) and <code>BAAI/bge-reranker-base</code> (cross-attention scoring). Repeated benchmark tests verified fast response times: under 25 ms for vector embeddings and under 50 ms for reranking 50 job posts on commodity desktop CPUs.</p></li>
+<li><p><strong>Sprint Phase III (11 October 2026 – 28 October 2026 — Remote Multi-Agent Development on Google Meet):</strong> Transitioning to daily remote Google Meet collaboration sessions. In this phase, we developed the core PhantmOS multi-agent system: automated job scrapers (Arbeitnow, Remotive, Google Jobs API, and search feeds), BM25 keyword indexer, Reciprocal Rank Fusion (RRF, k=60), multi-factor composite scoring formula, company intelligence researcher, and Supabase PostgreSQL persistence with Row-Level Security.</p></li>
+<li><p><strong>Sprint Phase IV (29 October 2026 – 1 November 2026 — LLM Fallback, Typst Resume Factory, Telegram Bot &amp; Finalization):</strong> Implementing the multi-model LLM fallback chain (Gemini 2.5 Flash → Groq LLaMA 3.3 70B → Hugging Face), integrating the Typst and RenderCV resume compilation engine, building the real-time Telegram bot command-and-control service with 3-button mobile actions, finalizing the React 19 web dashboard, packaging the multi-stage Docker container, and deploying it to Hugging Face Spaces. Final performance validation, static audits, and integration testing concluded Phase II milestones.</p></li>
+</ul>
+<h3 class="section-header" id="sec-2.4">2.4 Evidence and Evaluation Method</h3>
+<p>System verification was conducted using standard, reproducible engineering methods. Network routes and WireGuard handshakes were validated using Linux command-line tools (<code>ip route</code>, <code>wg show</code>, <code>ping</code>). Model serving latency was measured using Python test scripts with millisecond timestamps across repeated batches. The application test suite (comprising 26 unit tests across eight functional modules) and static code checks (Ruff, TypeScript compiler) were executed to ensure code reliability and cleanliness.</p>
+<h3 class="section-header" id="sec-2.5">2.5 Engineering Team Structure and Technical Responsibilities</h3>
+<p>The technical workload was divided among the seven team members across specialized functional domains. Each member took full responsibility for specific modules, ensuring seamless integration between hardware, AI inference, data collection, backend logic, and the web interface. Table 2B details the role, core responsibilities, and primary deliverables of each student.</p>
+<p><strong>Table 2B. Seven-Member Engineering Team Role and Technical Responsibilities</strong></p>
+<table>
+<colgroup>
+<col style="width: 20%"/>
+<col style="width: 22%"/>
+<col style="width: 30%"/>
+<col style="width: 28%"/>
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Team Member</strong></th>
+<th style="text-align: left;"><strong>Engineering Role</strong></th>
+<th style="text-align: left;"><strong>Core Subsystem Responsibilities</strong></th>
+<th style="text-align: left;"><strong>Key Technical Deliverables</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Ali Ahmad Raza Sheikh</strong></td>
+<td style="text-align: left;">Team Manager</td>
+<td style="text-align: left;">Cluster Infrastructure, Virtualization Topology &amp; Network Mesh</td>
+<td style="text-align: left;">KVM/QEMU setup, WireGuard crypto mesh (10.50.0.0/24), routed subnets, and operational sprint synchronization.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Akash Yaduwanshi</strong></td>
+<td style="text-align: left;">Team Leader</td>
+<td style="text-align: left;">Core Architecture, Neural Retrieval &amp; Cross-Encoder Inference</td>
+<td style="text-align: left;">End-to-end system design, BGE-small-en-v1.5 embeddings, cross-attention reranking model tuning, and latency benchmarking.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Onkar Dubey</strong></td>
+<td style="text-align: left;">Frontend Developer</td>
+<td style="text-align: left;">Frontend Architecture, UI/UX Design System &amp; Reactive State</td>
+<td style="text-align: left;">TanStack Start &amp; React 19 architecture, Vite 8 build pipeline, dark-mode design system, and client-side state orchestration.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Krishnapal Singh Chawda</strong></td>
+<td style="text-align: left;">Frontend Developer</td>
+<td style="text-align: left;">Interactive Workflows, Visual Analytics &amp; Component Telemetry</td>
+<td style="text-align: left;">Job discovery interfaces, interactive Recharts telemetry charts, responsive Radix UI components, and mobile UX optimization.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Pankaj Badoliya</strong></td>
+<td style="text-align: left;">Backend Developer</td>
+<td style="text-align: left;">Data Harvesting Engine, Scraping Adapters &amp; Ingestion Pipelines</td>
+<td style="text-align: left;">Multi-source scrapers (Arbeitnow, Remotive, Google Serp API, and multiple different sources), DuckDuckGo search integration, HTML cleaning, and SHA-256 deduplication.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Anushruti Jain</strong></td>
+<td style="text-align: left;">Backend Developer</td>
+<td style="text-align: left;">FastAPI Microservices, Database Schemas &amp; Typst PDF Factory</td>
+<td style="text-align: left;">RESTful API endpoints, Pydantic schemas, Supabase PostgreSQL RLS policies, RenderCV Typst resume compilation, and cryptography.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Mod Uwesh Khan Multani</strong></td>
+<td style="text-align: left;">Full Stack Developer</td>
+<td style="text-align: left;">Multi-Agent Orchestration Loop, Telegram Bot C2 &amp; End-to-End Integration</td>
+<td style="text-align: left;">Main orchestrator pipeline loop, asynchronous Telegram bot notifications, multi-provider LLM waterfall, and system integration testing.</td>
+</tr>
+</tbody>
+</table>
+<div class="page-break"></div>
+<div class="academic-chapter-header" id="chapter-3">
+<div class="academic-chapter-number">CHAPTER 3</div>
+<h2 class="academic-chapter-title">TECHNICAL BACKGROUND</h2>
+<div class="academic-chapter-divider"></div>
+</div>
+<h3 class="section-header" id="sec-3.1">3.1 Virtualisation with KVM, QEMU and libvirt</h3>
+<p>Kernel-based Virtual Machine (KVM) is a Linux kernel module that turns the host operating system into a Type-1 hypervisor using CPU hardware virtualization extensions (Intel VT-x or AMD-V). When a guest operating system runs inside KVM, it executes machine code directly on the physical processor with negligible virtualization overhead. QEMU (Quick Emulator) works alongside KVM by emulating hardware peripherals, including PCI buses, disk controllers, and virtual network adapters. The <code>libvirt</code> management framework provides a unified background daemon (<code>libvirtd</code>), standard XML configuration templates, and a command-line tool (<code>virsh</code>) to define, launch, and monitor virtual machines.</p>
+<p>Each virtual machine in our cluster uses dynamic virtual disk storage images (QCOW2). Dynamic virtual disks provide practical benefits: images grow dynamically as data is written rather than occupying full provisioned space upfront, and copy-on-write capabilities enable instant snapshot creation and fast system backups.</p>
+<h3 class="section-header" id="sec-3.2">3.2 Routed VM Networks and WireGuard</h3>
+<p>Connecting virtual machines across multiple physical computers often presents networking challenges. Standard bridged networking connects the physical network card directly to a software bridge, but this often fails on Wi-Fi networks because wireless access points block packets with unfamiliar MAC addresses. On the other hand, default NAT networking isolates virtual machines behind the host and prevents other computers on the LAN from reaching them. To overcome these limitations, we designed a routed multi-subnet architecture.</p>
+<p>Each physical host provisions an isolated local virtual bridge (<code>virbr-p1</code> for Host 1, <code>virbr-p2</code> for Host 2, <code>virbr-p3</code> for Host 3) managing an independent <code>/24</code> private subnet. Inter-host communication is unified using WireGuard, a modern virtual private network (VPN) running directly inside the Linux kernel. WireGuard uses cryptographic Noise handshakes, Curve25519 key exchange, and ChaCha20-Poly1305 encryption. By establishing point-to-point WireGuard tunnels (<code>wg0</code>) between hosts on UDP port 51820 and enabling persistent Linux kernel IP forwarding (<code>net.ipv4.ip_forward = 1</code>), packets routed to remote guest subnets pass securely across the physical Ethernet network without requiring complex routing software.</p>
+<h3 class="section-header" id="sec-3.3">3.3 Dense Embeddings and Semantic Retrieval</h3>
+<p>Traditional search engines rely on lexical term matching, which fails
+when a candidate query and a job posting use different words to describe
+the same concept (for example, 'DevOps specialist' vs. 'Site Reliability
+Engineer'). Dense vector embeddings solve this vocabulary mismatch.
+Neural embedding models process unstructured text and map it into a
+continuous, high-dimensional vector space (e.g., 384 dimensions) where
+semantically similar phrases are located close to one another.</p>
+<p>In PhantmOS, we utilize <code>BAAI/bge-small-en-v1.5</code>, an optimized transformer embedding model that maps job postings and student profiles into 384-dimensional dense vectors. Semantic relevance between a student query and job listings is evaluated using normalized cosine similarity:</p>
+<p style="text-align: center; font-family: 'Space Grotesk', monospace; font-size: 10pt; background: #f8fafc; padding: 8px 14px; border: 1px solid #e2e8f0; border-radius: 4px; margin: 12px auto; max-width: 82%;">
+<strong>Cosine Similarity</strong> = (Query Vector • Job Vector) / (||Query|| × ||Job||)
+</p>
+<p>Because the vectors are unit-normalized upon inference, cosine similarity simplifies to a rapid dot product, allowing top-candidate vector retrieval across thousands of postings in just a few milliseconds.</p>
+<h3 class="section-header" id="sec-3.4">3.4 BM25, Rank Fusion and Cross-Encoder
+Reranking</h3>
+<p>While dense embeddings excel at capturing high-level conceptual
+meaning, they sometimes dilute specific, non-negotiable technical
+requirements - such as exact framework versions, specialized cloud
+services, or specific certifications. To guarantee that critical
+keywords are never ignored, PhantmOS pairs dense vector search with BM25
+(Best Matching 25), a probabilistic lexical ranking algorithm that
+weights terms based on their term frequency (TF) and inverse document
+frequency (IDF):</p>
+<p>BM25 evaluates term frequency (TF) and inverse document frequency (IDF) while accounting for document length normalization, ensuring that long, verbose job descriptions do not unfairly outrank concise, targeted postings.</p>
+<p>The top candidates from both dense retrieval and BM25 are fused using
+Reciprocal Rank Fusion (RRF, with parameter k = 60), producing a
+balanced set of top-50 candidate opportunities.</p>
+<p>Next, the candidate pool undergoes high-precision cross-encoder
+reranking using <code>BAAI/bge-reranker-base</code>. Unlike bi-encoders (which
+encode queries and documents separately into static vectors), a
+cross-encoder feeds both the query and job description simultaneously
+into the transformer model as a single joint token sequence: <code>[CLS]
+Query [SEP] Job Description [SEP]</code>. This allows full all-to-all
+cross-attention between every single word in the candidate query and the
+job posting, detecting subtle contextual cues, negative qualifications,
+and exact skill fits that bi-encoders miss.</p>
+<figure class="figure-box" style="page-break-inside: avoid; break-inside: avoid;"><img alt="Figure 1" src="./media/image1.jpeg" style="max-height: 118mm !important; max-width: 38% !important; width: auto !important;"/><figcaption class="figure-caption"><strong>Figure 1.</strong> Bi-Encoder Semantic Search vs. Cross-Encoder Deep Attention Architecture</figcaption></figure>
+<h3 class="section-header" id="sec-3.5">3.5 Docker and Hugging Face Spaces</h3>
+<p>To ensure that PhantmOS can be accessed by any student without
+requiring local software installation, the core application is
+containerized using Docker. Docker packages the FastAPI application
+server, background worker threads, Python dependencies, and pre-compiled
+React static assets into an immutable, portable image.</p>
+<p>We deploy this image to Hugging Face Spaces, an open cloud hosting
+platform that supports arbitrary Docker containers. The container runs
+unprivileged under UID 1000 and binds to internal port 7860. Hugging
+Face provides automatic TLS/HTTPS termination, free public domain
+routing, and seamless Git-based deployment workflows.</p>
+<div class="page-break"></div>
+<div class="academic-chapter-header" id="chapter-4">
+<div class="academic-chapter-number">CHAPTER 4</div>
+<h2 class="academic-chapter-title">INTEGRATED SYSTEM ARCHITECTURE</h2>
+<div class="academic-chapter-divider"></div>
+</div>
+<h3 class="section-header" id="sec-4.1">4.1 Architecture Overview</h3>
+<p>PhantmOS is designed as a two-tier distributed platform. The user-facing web portal is hosted on Hugging Face Spaces, while the compute-heavy AI inference tasks run on our private three-node Linux virtualization cluster (ClusterOS) located in the college computer lab. Figure 2 shows the overall integrated architecture.</p>
+<figure class="figure-box"><img alt="Figure 2" src="./media/image2.png" style="max-width:92%;"/><figcaption class="figure-caption"><strong>Figure 2.</strong> Integrated PhantmOS System Architecture and Deployment Topology</figcaption></figure>
+<p>Separating the student web portal from the AI compute nodes provides three practical advantages: the public web application remains fast and lightweight, memory-intensive AI models do not consume web server resources, and all vector embedding and reranking tasks run locally without paying for commercial cloud AI services.</p>
+<h3 class="section-header" id="sec-4.2">4.2 Major Components and Responsibilities</h3>
+<p>The platform is divided into modular subsystems, each with
+well-defined boundaries and operational responsibilities, as summarized
+in Table 3.</p>
+<p><strong>Table 3. Major System Components and Architectural
+Responsibilities</strong></p>
+<table>
+<colgroup>
+<col style="width: 25%"/>
+<col style="width: 25%"/>
+<col style="width: 25%"/>
+<col style="width: 25%"/>
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Subsystem Name</strong></th>
+<th style="text-align: left;"><strong>Technology Stack</strong></th>
+<th style="text-align: left;"><strong>Deployment Location</strong></th>
+<th style="text-align: left;"><strong>Core Engineering
+Responsibility</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Student Web UI</td>
+<td style="text-align: left;">React 19 / TypeScript 5.8 / TanStack Start / Tailwind v4</td>
+<td style="text-align: left;">Hugging Face Spaces</td>
+<td style="text-align: left;">Provides candidate profile management, reactive job filtering, telemetry analytics, and interactive resume studio.</td>
+</tr>
+<tr>
+<td style="text-align: left;">API Gateway Server</td>
+<td style="text-align: left;">FastAPI / Uvicorn (Python)</td>
+<td style="text-align: left;">Application Container</td>
+<td style="text-align: left;">Coordinates search requests, manages user
+sessions, and routes inference tasks.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Job Harvesting Connectors</td>
+<td style="text-align: left;">Python Ingestion Adapters</td>
+<td style="text-align: left;">Background Workers</td>
+<td style="text-align: left;">Extracts job postings from public ATS
+platforms (Arbeitnow, Remotive, Google Serp API, and multiple different sources).</td>
+</tr>
+<tr>
+<td style="text-align: left;">Data Normalization Engine</td>
+<td style="text-align: left;">Custom Regex &amp; Parsing Logic</td>
+<td style="text-align: left;">FastAPI Service</td>
+<td style="text-align: left;">Strips HTML tags, standardizes salary
+currencies, and generates SHA-256 deduplication hashes.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Hybrid Search Engine</td>
+<td style="text-align: left;">Vector Cosine &amp; BM25 / RRF</td>
+<td style="text-align: left;">FastAPI Service</td>
+<td style="text-align: left;">Retrieves candidate matches by combining
+dense semantic embeddings with lexical keyword scoring.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Model Inference Nodes</td>
+<td style="text-align: left;">FastAPI Microservices / PyTorch</td>
+<td style="text-align: left;">KVM Virtual Guests</td>
+<td style="text-align: left;">Hosts BGE-small-en-v1.5 embeddings and BGE
+cross-encoder reranker on self-managed CPU cores.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Resume Synthesis Studio</td>
+<td style="text-align: left;">Groq / Gemini / HF / RenderCV + Typst</td>
+<td style="text-align: left;">FastAPI Microservice</td>
+<td style="text-align: left;">Synthesizes tailored, truthful STAR bullets via LLM waterfall and compiles pixel-perfect ATS PDFs via RenderCV &amp; Typst.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Database &amp; File Storage</td>
+<td style="text-align: left;">Supabase PostgreSQL / S3 Storage</td>
+<td style="text-align: left;">Managed Cloud Backend</td>
+<td style="text-align: left;">Persists student accounts, job listings,
+match scores, and private resume documents under strict RLS.</td>
+</tr>
+</tbody>
+</table>
+<h3 class="section-header" id="sec-4.3">4.3 End-to-End Data Flow</h3>
+<p>The working of PhantmOS follows a step-by-step process, starting from fetching job openings to creating the final customized resume PDF. Figure 3 illustrates this complete end-to-end workflow.</p>
+<figure class="figure-box"><img alt="Figure 3" src="./media/image3.png" style="max-width:92%;"/><figcaption class="figure-caption"><strong>Figure 3.</strong> End-to-End Autonomous Job Discovery and Application Flow</figcaption></figure>
+<p>The end-to-end data lifecycle proceeds through five main phases:</p>
+<ul>
+<li><p><strong>1. Ingestion &amp; Normalization:</strong> Scheduled background workers fetch job listings from public APIs, clean HTML formatting, extract salary and location details, generate unique SHA-256 hashes to prevent duplicate entries, and store new openings in Supabase PostgreSQL.</p></li>
+<li><p><strong>2. Student Profile Input:</strong> A student logs into the portal, enters their target job titles, and uploads their baseline resume. The profile text is parsed and prepared for retrieval.</p></li>
+<li><p><strong>3. Hybrid Retrieval:</strong> The student's query is converted into a vector and compared against stored job embeddings (dense semantic search) while simultaneously scored using BM25 (keyword search). Reciprocal Rank Fusion combines both result lists into a top-50 candidate pool.</p></li>
+<li><p><strong>4. Cross-Encoder Reranking &amp; Scoring:</strong> The top-50 candidate jobs are sent to our local inference service for cross-encoder reranking. The system then calculates a composite relevance score, sorting jobs into HOT, WARM, COLD, or REJECT categories.</p></li>
+<li><p><strong>5. Resume Tailoring &amp; Download:</strong> For selected HOT or WARM roles, the student can generate a customized resume. The LLM engine rewrites accomplishment bullet points using the STAR format, which are then compiled into a clean, ATS-compliant PDF for immediate download.</p></li>
+</ul>
+<h3 class="section-header" id="sec-4.4">4.4 Integration Boundary Between the Space and the VM
+Cluster</h3>
+<p>A key technical challenge was connecting the public Hugging Face Space with our local college computer lab. Since the lab computers are on a private network behind NAT routers without public static IP addresses, direct inbound connections from the internet are blocked. To solve this, the system connects through an encrypted WireGuard tunnel. In addition, to prevent unexpected lab downtime from disrupting student access, the application includes an automatic cloud fallback: if a local virtual machine fails to respond within 3 seconds, requests automatically route to free cloud AI models, ensuring continuous uptime.</p>
+<figure class="figure-box">
+<img alt="Figure 4. PhantmOS Production Web Dashboard Interface" src="./media/phantmos_real_dashboard_home.png" style="max-width:98%; border: 1.5px solid #1e293b; border-radius: 4px;"/>
+<figcaption class="figure-caption"><strong>Figure 4.</strong> PhantmOS Production Web Dashboard (Real-World Dark UI showing Home Overview, Top Matches, and Continuous Job Scanning Pipeline)</figcaption>
+</figure>
+<h3 class="section-header" id="sec-4.5">4.5 Implementation Languages, Libraries, and Technology Stack</h3>
+<p>The implementation of PhantmOS combines high-level web frameworks with systems programming tools and machine learning libraries. All tools and packages were chosen for high performance, type safety, modular design, and open-source availability. Table 3B summarizes the primary programming languages used, while Table 3C lists the key libraries, frameworks, and dependencies verified in the project repository.</p>
+<p><strong>Table 3B. Implementation Languages Across the PhantmOS System</strong></p>
+<table>
+<colgroup>
+<col style="width: 20%"/>
+<col style="width: 16%"/>
+<col style="width: 34%"/>
+<col style="width: 30%"/>
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Language</strong></th>
+<th style="text-align: left;"><strong>Version</strong></th>
+<th style="text-align: left;"><strong>Subsystem Usage</strong></th>
+<th style="text-align: left;"><strong>Engineering Justification</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Python</strong></td>
+<td style="text-align: left;">3.12</td>
+<td style="text-align: left;">Core Backend, Orchestration, Machine Learning, Web Crawlers, PDF Rendering</td>
+<td style="text-align: left;">Unmatched ecosystem for neural transformer inference, asynchronous I/O via FastAPI/Uvicorn, and extensive scraping utilities.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>TypeScript</strong></td>
+<td style="text-align: left;">5.8.3</td>
+<td style="text-align: left;">Student Web Application, TanStack Routing, Component Hierarchy</td>
+<td style="text-align: left;">Compile-time type safety, structured data models matching backend Pydantic schemas, and robust IDE auto-completion.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>SQL (PostgreSQL)</strong></td>
+<td style="text-align: left;">15+ (Supabase)</td>
+<td style="text-align: left;">Relational Data Persistence, Multi-User Migrations, Row-Level Security</td>
+<td style="text-align: left;">ACID compliance, relational integrity, native JSONB support for resume schemas, and declarative security rules.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Typst</strong></td>
+<td style="text-align: left;">Latest</td>
+<td style="text-align: left;">ATS Resume Typesetting and PDF Generation Engine</td>
+<td style="text-align: left;">Next-generation markup typesetting offering compile speeds 10x faster than LaTeX with guaranteed mathematical layout consistency.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>HTML5 &amp; CSS3</strong></td>
+<td style="text-align: left;">Modern Standard</td>
+<td style="text-align: left;">Frontend Presentation, Tailwind CSS v4 Utilities, Print Stylesheets</td>
+<td style="text-align: left;">Semantic document architecture, mobile-responsive layouts, and performant GPU-accelerated styling tokens.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Bash &amp; Batch</strong></td>
+<td style="text-align: left;">POSIX / Windows</td>
+<td style="text-align: left;">Cluster Infrastructure Scripts, Container Entrypoint, Local Launcher</td>
+<td style="text-align: left;">Automated virtual machine lifecycle management, WireGuard initialization, and Docker container startup sequencing.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Table 3C. Core Frameworks, Libraries, and Production Dependencies</strong></p>
+<table>
+<colgroup>
+<col style="width: 24%"/>
+<col style="width: 36%"/>
+<col style="width: 40%"/>
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Domain / Category</strong></th>
+<th style="text-align: left;"><strong>Frameworks &amp; Libraries Verified in Codebase</strong></th>
+<th style="text-align: left;"><strong>Functional Role in PhantmOS</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Frontend Core</strong></td>
+<td style="text-align: left;"><code>react 19.2.0</code>, <code>@tanstack/react-start 1.168</code>, <code>@tanstack/react-router 1.170</code>, <code>vite 8.0</code></td>
+<td style="text-align: left;">Full-stack SSR/SPA architecture, type-safe route trees, blazing-fast HMR and minified asset bundling.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>UI, Styling &amp; Motion</strong></td>
+<td style="text-align: left;"><code>tailwindcss 4.2</code>, <code>@radix-ui/react-*</code>, <code>lucide-react 0.575</code>, <code>motion 12.4</code>, <code>sonner 2.0</code></td>
+<td style="text-align: left;">Accessible primitive components, dark-mode styling, physics-based micro-animations, and toast alerts.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Data Fetching &amp; Charts</strong></td>
+<td style="text-align: left;"><code>@tanstack/react-query 5.101</code>, <code>recharts 2.15</code>, <code>react-hook-form 7.71</code>, <code>zod 3.24</code></td>
+<td style="text-align: left;">Reactive server state caching, interactive latency telemetry charts, and schema validation.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Backend Web Server</strong></td>
+<td style="text-align: left;"><code>fastapi 0.100+</code>, <code>uvicorn[standard]</code>, <code>pydantic v2</code>, <code>python-multipart</code></td>
+<td style="text-align: left;">High-performance asynchronous REST API gateway, OpenAPI autogenerated docs, and data validation.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Database &amp; Storage</strong></td>
+<td style="text-align: left;"><code>supabase 2.109</code> (PostgreSQL Client with RLS), <code>cryptography</code> (Fernet/AES)</td>
+<td style="text-align: left;">Tenant-isolated data access, secure credential encryption, and public PDF storage bucket management.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Harvesting &amp; Scraping</strong></td>
+<td style="text-align: left;"><code>ddgs</code> (DuckDuckGo Search), <code>beautifulsoup4</code>, <code>httpx</code>, <code>requests</code></td>
+<td style="text-align: left;">Asynchronous extraction from Arbeitnow, Remotive, Google Serp API, and multiple different sources.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Information Retrieval &amp; ML</strong></td>
+<td style="text-align: left;"><code>sentence-transformers</code>, <code>torch</code> (CPU-optimized), <code>numpy</code>, Jina AI REST API</td>
+<td style="text-align: left;">384-dimensional dense semantic embeddings (MiniLM / BGE-small), BM25 lexical ranking, and RRF fusion.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>LLM Waterfall Engine</strong></td>
+<td style="text-align: left;">Groq API (Llama 3.1/3.3), Google Gemini REST API, HuggingFace Inference API</td>
+<td style="text-align: left;">Multi-provider cascading LLM pipeline for hallucination-free resume adaptation and cold email generation.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>PDF Factory &amp; Parsing</strong></td>
+<td style="text-align: left;"><code>rendercv[full] &gt;=0.3.0</code>, <code>typst</code>, <code>pypdf</code>, <code>WeasyPrint</code> (Cairo/Pango)</td>
+<td style="text-align: left;">Compiles structured JSON resumes into pixel-perfect ATS-compliant PDFs and extracts text from master resumes.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Background Automation</strong></td>
+<td style="text-align: left;"><code>apscheduler</code>, <code>python-telegram-bot</code>, <code>python-dotenv</code></td>
+<td style="text-align: left;">Cron-based periodic harvesting loops and real-time interactive Telegram bot notifications.</td>
+</tr>
+</tbody>
+</table>
+<div class="page-break"></div>
+<div class="academic-chapter-header" id="chapter-5">
+<div class="academic-chapter-number">CHAPTER 5</div>
+<h2 class="academic-chapter-title">VIRTUALISATION CLUSTER AND SELF-HOSTED INFERENCE</h2>
+<div class="academic-chapter-divider"></div>
+</div>
+<h3 class="section-header" id="sec-5.1">5.1 Physical Environment</h3>
+<p>The private computing infrastructure was set up using three HP 200 Pro G4 22 All-in-One desktop computers located in our college computer lab. Table 4 details the physical hardware inventory.</p>
+<p><strong>Table 4. Physical Host Inventory and Hardware
+Specifications</strong></p>
+<table>
+<colgroup>
+<col style="width: 20%"/>
+<col style="width: 20%"/>
+<col style="width: 20%"/>
+<col style="width: 20%"/>
+<col style="width: 20%"/>
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Host ID</strong></th>
+<th style="text-align: left;"><strong>Laboratory LAN IP</strong></th>
+<th style="text-align: left;"><strong>WireGuard IP</strong></th>
+<th style="text-align: left;"><strong>Ethernet MAC</strong></th>
+<th style="text-align: left;"><strong>Hardware &amp; Operating System
+Specifications</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">P1</td>
+<td style="text-align: left;">192.168.5.77/22</td>
+<td style="text-align: left;">10.50.0.1</td>
+<td style="text-align: left;">c8:5a:cf:a4:08:3b</td>
+<td style="text-align: left;">HP 200 Pro G4; Intel Core i5-10210U
+(4C/8T); 8 GB RAM; Ubuntu 24.04 LTS</td>
+</tr>
+<tr>
+<td style="text-align: left;">P2</td>
+<td style="text-align: left;">192.168.5.32/22</td>
+<td style="text-align: left;">10.50.0.2</td>
+<td style="text-align: left;">e0:70:ea:ae:41:f9</td>
+<td style="text-align: left;">HP 200 Pro G4; Intel Core i5-10210U
+(4C/8T); 8 GB RAM; Ubuntu 24.04 LTS</td>
+</tr>
+<tr>
+<td style="text-align: left;">P3</td>
+<td style="text-align: left;">192.168.5.23/22</td>
+<td style="text-align: left;">10.50.0.3</td>
+<td style="text-align: left;">e0:70:ea:ae:41:0f</td>
+<td style="text-align: left;">HP 200 Pro G4; Intel Core i5-10210U
+(4C/8T); 8 GB RAM; Ubuntu 24.04 LTS</td>
+</tr>
+</tbody>
+</table>
+<h3 class="section-header" id="sec-5.2">5.2 Virtual Machine Configuration</h3>
+<p>On each physical computer, a dedicated virtual machine was configured using KVM/QEMU and libvirt. To balance virtualization needs with the host operating system, each VM was allocated 2 vCPUs and 4 GB of RAM, leaving approximately 4 GB of memory for host Linux tasks. Storage was allocated using 60 GB dynamic virtual disks (QCOW2). Table 5 summarizes the virtual machine specifications.</p>
+<p><strong>Table 5. Virtual Machine Specifications and Resource
+Allocation</strong></p>
+<table>
+<colgroup>
+<col style="width: 12%"/>
+<col style="width: 12%"/>
+<col style="width: 12%"/>
+<col style="width: 12%"/>
+<col style="width: 12%"/>
+<col style="width: 12%"/>
+<col style="width: 12%"/>
+<col style="width: 12%"/>
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Host</strong></th>
+<th style="text-align: left;"><strong>VM Name</strong></th>
+<th style="text-align: left;"><strong>Guest IP Address</strong></th>
+<th style="text-align: left;"><strong>vCPU</strong></th>
+<th style="text-align: left;"><strong>RAM</strong></th>
+<th style="text-align: left;"><strong>Disk Size</strong></th>
+<th style="text-align: left;"><strong>Virtual MAC</strong></th>
+<th style="text-align: left;"><strong>Guest OS</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">P1</td>
+<td style="text-align: left;">vm-p1-test</td>
+<td style="text-align: left;">10.60.1.119</td>
+<td style="text-align: left;">2 vCPU</td>
+<td style="text-align: left;">4 GB</td>
+<td style="text-align: left;">60 GB Virtual Disk (SSD)</td>
+<td style="text-align: left;">52:54:00:a1:b2:01</td>
+<td style="text-align: left;">Ubuntu 24.04 LTS Server</td>
+</tr>
+<tr>
+<td style="text-align: left;">P2</td>
+<td style="text-align: left;">vm-p1-test</td>
+<td style="text-align: left;">10.60.2.172</td>
+<td style="text-align: left;">2 vCPU</td>
+<td style="text-align: left;">4 GB</td>
+<td style="text-align: left;">60 GB Virtual Disk (SSD)</td>
+<td style="text-align: left;">52:54:00:a1:b2:02</td>
+<td style="text-align: left;">Ubuntu 24.04 LTS Server</td>
+</tr>
+<tr>
+<td style="text-align: left;">P3</td>
+<td style="text-align: left;">vm-p3</td>
+<td style="text-align: left;">10.60.3.110</td>
+<td style="text-align: left;">2 vCPU</td>
+<td style="text-align: left;">4 GB</td>
+<td style="text-align: left;">60 GB Virtual Disk (SSD)</td>
+<td style="text-align: left;">52:54:00:a1:b2:03</td>
+<td style="text-align: left;">Ubuntu 24.04 LTS Server</td>
+</tr>
+</tbody>
+</table>
+<h3 class="section-header" id="sec-5.3">5.3 Network Design</h3>
+<p>The network architecture is structured into three layers: the physical college lab local area network (LAN), the encrypted WireGuard host mesh, and the routed private guest subnets. Table 6 provides the complete IP addressing plan, while Figure 5 illustrates the network topology.</p>
+<p><strong>Table 6. Network Addressing Plan for Hosts, WireGuard Mesh,
+and VM Subnets</strong></p>
+<table>
+<colgroup>
+<col style="width: 25%"/>
+<col style="width: 25%"/>
+<col style="width: 25%"/>
+<col style="width: 25%"/>
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Network Tier</strong></th>
+<th style="text-align: left;"><strong>Subnet Range</strong></th>
+<th style="text-align: left;"><strong>Gateway / Router</strong></th>
+<th style="text-align: left;"><strong>Operational Purpose</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Physical LAN</td>
+<td style="text-align: left;">192.168.4.0/22</td>
+<td style="text-align: left;">192.168.4.1</td>
+<td style="text-align: left;">Physical Ethernet switches connecting
+hosts P1, P2, and P3.</td>
+</tr>
+<tr>
+<td style="text-align: left;">WireGuard Mesh</td>
+<td style="text-align: left;">10.50.0.0/24</td>
+<td style="text-align: left;">P2P Mesh</td>
+<td style="text-align: left;">Encrypted point-to-point tunnels on UDP
+port 51820 connecting all hosts.</td>
+</tr>
+<tr>
+<td style="text-align: left;">P1 Guest Subnet</td>
+<td style="text-align: left;">10.60.1.0/24</td>
+<td style="text-align: left;">10.60.1.1 (virbr-p1)</td>
+<td style="text-align: left;">Private libvirt virtual bridge on P1
+hosting VM vm-p1-test (10.60.1.119).</td>
+</tr>
+<tr>
+<td style="text-align: left;">P2 Guest Subnet</td>
+<td style="text-align: left;">10.60.2.0/24</td>
+<td style="text-align: left;">10.60.2.1 (virbr-p2)</td>
+<td style="text-align: left;">Private libvirt virtual bridge on P2
+hosting VM vm-p2-test (10.60.2.172).</td>
+</tr>
+<tr>
+<td style="text-align: left;">P3 Guest Subnet</td>
+<td style="text-align: left;">10.60.3.0/24</td>
+<td style="text-align: left;">10.60.3.1 (virbr-p3)</td>
+<td style="text-align: left;">Private libvirt virtual bridge on P3
+hosting VM vm-p3 (10.60.3.110).</td>
+</tr>
+</tbody>
+</table>
+<figure class="figure-box"><img alt="Figure 5" src="./media/image4.png" style="max-width:92%;"/><figcaption class="figure-caption"><strong>Figure 5.</strong> Three-Node Physical Cluster and Routed VM Network Topology</figcaption></figure>
+<h3 class="section-header" id="sec-5.4">5.4 Implementation of the Virtualisation
+Environment</h3>
+<p>Setting up this virtualized environment involved configuring custom libvirt virtual networks, assigning static IP addresses, and configuring persistent iptables forwarding rules across the WireGuard interfaces. Figure 6 illustrates the host-to-VM mesh implementation and network routing design.</p>
+<figure class="figure-box"><img alt="Figure 6" src="./media/image5.jpeg" style="max-width:90%;"/><figcaption class="figure-caption"><strong>Figure 6.</strong> Virtualisation Cluster Implementation, Mesh Routing, and Subnet Configuration</figcaption></figure>
+<p>To establish cross-node guest connectivity, each host enables Linux
+packet forwarding and maintains explicit route table entries:</p>
+<ul>
+<li><p>Host P1 routes 10.60.2.0/24 via WireGuard peer 10.50.0.2 and
+10.60.3.0/24 via peer 10.50.0.3.</p></li>
+<li><p>Host P2 routes 10.60.1.0/24 via WireGuard peer 10.50.0.1 and
+10.60.3.0/24 via peer 10.50.0.3.</p></li>
+<li><p>Host P3 routes 10.60.1.0/24 via WireGuard peer 10.50.0.1 and
+10.60.2.0/24 via peer 10.50.0.2.</p></li>
+</ul>
+<p>By running <code>sudo iptables -A FORWARD -i wg0 -o virbr-p+ -j ACCEPT</code>,
+packets received across the encrypted WireGuard mesh are permitted to
+traverse into local virtual bridges, enabling full guest-to-guest and
+host-to-guest communication.</p>
+<figure class="figure-box">
+<img alt="Figure 6B. ClusterOS KVM / Libvirt Control Center &amp; Compute Fabric Interface" src="./media/clusteros_kvm_control_overview.png" style="max-width:98%; border: 1.5px solid #1e293b; border-radius: 4px;"/>
+<figcaption class="figure-caption"><strong>Figure 6B.</strong> ClusterOS KVM / Libvirt Control Center &amp; Compute Fabric Interface (HOLKAR 3-Node Lab Overview showing Hypervisor Mesh Synced on Linux Kernel 6.8.0-45-generic, Libvirtd 10.0.0, 24 CPU Cores / 24 GB Aggregate RAM Fabric, and Strict-L2 Virtual Net 10.60.0.0/16)</figcaption>
+</figure>
+<p>To eliminate manual command-line overhead during laboratory testing, we implemented the <strong>ClusterOS Control Center</strong>—a purpose-built cluster fabric management interface running locally on <code>127.0.0.1:8765</code> (backed by an integrated XFCE engine and Antigravity Agent). As shown in Figure 6B, the dashboard continuously monitors hypervisor health, verifies node quorum, and displays real-time resource allocations across the three physical HP 200 Pro G4 units (P1: <code>192.168.5.77</code>, P2: <code>192.168.5.32</code>, and P3: <code>192.168.5.23</code>). The system enforces strict Layer-2 isolation (<code>Strict-L2</code>) across the <code>10.60.0.0/16</code> guest fabric while maintaining a dedicated Wake-on-LAN broadcast subnet (<code>192.168.7.255</code>).</p>
+<h3 class="section-header" id="sec-5.5">5.5 Model-Serving Role</h3>
+<p>Each virtual machine runs a dedicated FastAPI microservice managed as a systemd background service: VM 1 (<code>10.60.1.119:8000</code>) hosts the <code>BAAI/bge-small-en-v1.5</code> embedding model, while VM 2 (<code>10.60.2.172:8001</code>) hosts the <code>BAAI/bge-reranker-base</code> cross-encoder model. VM 3 (<code>10.60.3.185:8002</code>) serves as an automated staging and standby instance.</p>
+<h3 class="section-header" id="sec-5.6">5.6 Remote Administration and Out-of-Band
+Control</h3>
+<p>Managing physical computers in an academic lab without a separate monitor at each desk required a secure remote administration approach. We configured remote access using SSH key authentication via an SSH ProxyJump gateway, disabling password logins for security. For remote power control, Wake-on-LAN (WoL) was enabled in the BIOS on the physical network cards, allowing computers to be powered on over the network when needed.</p>
+<figure class="figure-box">
+<img alt="Figure 6C. ClusterOS Virtual Machines Matrix and Remote Host Control Interface" src="./media/clusteros_vm_matrix_management.png" style="max-width:98%; border: 1.5px solid #1e293b; border-radius: 4px;"/>
+<figcaption class="figure-caption"><strong>Figure 6C.</strong> ClusterOS Virtual Machines Matrix and Remote Host Control Interface (KVM/QEMU Guest Domain Lifecycle Controls, Multi-Host WoL Sequence, and Action Context Menu across Nodes P1, P2, and P3)</figcaption>
+</figure>
+<p>As illustrated in Figure 6C, the <strong>Virtual Machines Matrix</strong> provides granular lifecycle control over all active virtual guests (<code>vm-p1-test</code> on <code>10.60.1.119</code>, <code>vm-p2-test</code> on <code>10.60.2.172</code>, and <code>vm-p3</code> on <code>10.60.3.110</code>). The web control console offers unified operations:</p>
+<ul>
+<li><p><strong>Cluster-Wide Power Orchestration:</strong> Dedicated <code>Start All VMs</code> and <code>Shutdown All VMs</code> actions. Shutdown sequences communicate with the <code>qemu-guest-agent</code> daemon via ACPI to flush filesystem caches and prevent disk corruption before stopping domains.</p></li>
+<li><p><strong>Automated Wake-on-LAN (WoL) Sequence:</strong> Node P3 operates as the permanent <strong>WOL MASTER</strong> (<code>192.168.5.23</code>). During cluster spin-up, P3 emits targeted magic broadcast packets across subnet <code>192.168.7.255</code> in a staggered sequence (<code>P3 → P1 → P2</code>) to boot physical worker units without manual physical button presses.</p></li>
+<li><p><strong>Per-Domain Action Context Menus:</strong> Each virtual guest card exposes instant actions: <em>Start VM</em>, <em>Shutdown VM</em>, <em>Restart VM</em>, <em>Force Stop</em>, alongside host diagnostics including direct <em>SSH Terminal</em> access, <em>Wake Host (WoL)</em>, <em>Reboot Host</em>, and <em>Power Off Host</em>.</p></li>
+</ul>
+<figure class="figure-box">
+<img alt="Figure 7. Physical Cluster Linux Terminal Monitoring Console" src="./media/image_real_terminal_cluster.png" style="max-width:98%;"/>
+<figcaption class="figure-caption"><strong>Figure 7.</strong> Physical Cluster Linux Terminal Monitoring Console (Live Multi-Pane Session showing <code>virsh list</code> VM States, <code>wg show</code> Mesh Transfer Metrics, and Pytest Suite Execution)</figcaption>
+</figure>
+<h3 class="section-header" id="sec-5.7">5.7 Infrastructure Limitations</h3>
+<p>The cluster operates within realistic constraints of an academic laboratory: computers lack redundant power backup, college power is turned off after lab hours, and single-gigabit network ports limit maximum transfer speeds. These practical factors led directly to our decoupled design, ensuring that the student web portal stays available online even if the local lab computers are temporarily shut down.</p>
+<div class="page-break"></div>
+<div class="academic-chapter-header" id="chapter-6">
+<div class="academic-chapter-number">CHAPTER 6</div>
+<h2 class="academic-chapter-title">PHANTMOS APPLICATION DESIGN AND IMPLEMENTATION</h2>
+<div class="academic-chapter-divider"></div>
+</div>
+<h3 class="section-header" id="sec-6.1">6.1 Autonomous Multi-Agent System Architecture</h3>
+<p>PhantmOS is organized around a multi-agent architecture where specialized software agents handle individual stages of the job discovery and resume preparation lifecycle. An asynchronous central controller coordinates eight dedicated agents across specific operational tasks:</p>
+<ul>
+<li><strong>1. Discovery Agent (<code>DiscoveryAgent</code>):</strong> Autonomously harvests job openings across multiple job sources (Arbeitnow, Remotive, Google Serp API, and multiple different sources), strips noisy HTML markup, applies keyword pre-filters, and computes SHA-256 canonical fingerprints to prevent duplicate listings in Supabase PostgreSQL.</li>
+<li><strong>2. Ranking &amp; Scoring Agent (<code>RankingAgent</code>):</strong> Computes 384-dimensional dense semantic embeddings using our self-hosted <code>bge-small-en-v1.5</code> model, calculates BM25 lexical keyword overlap, merges candidate pools via Reciprocal Rank Fusion (k=60), executes deep cross-attention reranking (<code>bge-reranker-base</code>), and classifies opportunities into HOT (≥85%), WARM (≥60%), COLD (≥40%), and REJECT (&lt;40%) bands.</li>
+<li><strong>3. Company Intelligence Agent (<code>ResearchAgent</code> / <code>ContextResearcher</code>):</strong> Automatically gathers background intelligence on target employers using DuckDuckGo search queries and persistent caching—extracting company culture, engineering stack, recent funding, and business goals to feed resume customization and interview preparation.</li>
+<li><strong>4. Resume Tailor Agent (<code>ResumeAgent</code>):</strong> Orchestrates an intelligent, multi-provider LLM waterfall (Google Gemini 2.5 Flash → Groq LLaMA 3.3 70B → Hugging Face LLaMA 3.1 8B). It synthesizes role-targeted STAR-formatted bullet points and high-conversion 3-sentence cold emails while enforcing strict zero-hallucination guardrails (no fabricated skills or past employers).</li>
+<li><strong>5. ATS Verification &amp; Evaluation Agent (<code>ATSAgent</code> / <code>Evaluator</code>):</strong> Analyzes the synthesized resume against the target job description to compute a quantitative ATS score (0–100), identify keyword gaps or missing qualifications, and generate role-specific technical interview questions.</li>
+<li><strong>6. Application &amp; Document Factory Agent (<code>ApplicationAgent</code> / <code>PdfFactory</code>):</strong> Compiles tailored JSON resumes into publication-grade, ATS-parsable PDF documents using <code>RenderCV</code> coupled with the <code>Typst</code> compiler backend, persisting outputs to Supabase Cloud Storage.</li>
+<li><strong>7. Telegram Delivery Agent (<code>TelegramDeliveryAgent</code>):</strong> Interfaces with the Telegram Bot API to dispatch real-time mobile job cards with match telemetry and interactive 3-button actions (<em>Auto-Apply</em>, <em>Review</em>, <em>Skip</em>), backed by an asynchronous rate-limited delivery queue.</li>
+<li><strong>8. Feedback &amp; Analytics Agent (<code>FeedbackAgent</code> / <code>AnalyticsAgent</code>):</strong> Monitors user review decisions, captures structured skip reasons (e.g., location mismatch, compensation, tech stack preference), dynamically recalibrates composite scoring weights, and generates daily digest telemetry.</li>
+</ul>
+<h3 class="section-header" id="sec-6.2">6.2 Job Discovery and Data Normalisation</h3>
+<p>Job postings are collected asynchronously from multiple career portals and public feeds, including Arbeitnow, Remotive, Google Jobs API, DuckDuckGo search, and public employer endpoints. Raw data from external job boards is often messy: descriptions contain mixed HTML tags, extra whitespace, unstructured salary text, and inconsistent location formats.</p>
+<p>The normalization module cleans this incoming data using regular expressions and HTML sanitization, extracting clean text descriptions, isolating mandatory qualification sections, and converting salary figures into standard annual amounts. To avoid duplicate job listings in student search feeds, each job record is given a unique SHA-256 fingerprint hash based on the normalized company name, job title, and location. When an incoming record matches an existing hash, the system updates the record instead of creating a duplicate.</p>
+<figure class="figure-box">
+<img alt="Figure 4B. PhantmOS Job Discovery Engine" src="./media/phantmos_real_job_discovery.png" style="max-width:98%; border: 1.5px solid #1e293b; border-radius: 4px;"/>
+<figcaption class="figure-caption"><strong>Figure 4B.</strong> PhantmOS Job Discovery Engine Interface (Interactive Search Query Input, Target Role Specification, and High-Signal Opportunity Filtration)</figcaption>
+</figure>
+<h3 class="section-header" id="sec-6.3">6.3 Hybrid Retrieval Pipeline</h3>
+<p>PhantmOS uses a multi-stage hybrid retrieval method to find and rank job openings, as shown in Figure 8. Finding the best job matches requires balancing general conceptual similarity with exact technical skill requirements.</p>
+<figure class="figure-box"><img alt="Figure 8" src="./media/image6.png" style="max-width:92%;"/><figcaption class="figure-caption"><strong>Figure 8.</strong> Multi-Stage Hybrid Retrieval and Cross-Encoder Reranking Pipeline</figcaption></figure>
+<p>The retrieval engine executes in three coordinated stages:</p>
+<ul>
+<li><p>Dense Vector Search: The student query is embedded into a
+384-dimensional vector using BGE-small-en-v1.5 and compared against
+pre-computed job embeddings via cosine similarity, retrieving the top-50
+most conceptually relevant postings.</p></li>
+<li><p>BM25 Lexical Keyword Search: The query keywords are parsed and
+scored using the BM25 algorithm, identifying postings with high
+technical keyword overlap.</p></li>
+<li><p>Reciprocal Rank Fusion (RRF): The ranked lists from both dense
+and lexical stages are merged using the RRF formula with constant
+k=60:</p></li>
+</ul>
+<p style="text-align: center; font-family: 'Space Grotesk', monospace; font-size: 10pt; background: #f8fafc; padding: 8px 14px; border: 1px solid #e2e8f0; border-radius: 4px; margin: 12px auto; max-width: 82%;">
+<strong>RRF Score(d)</strong> = [1 / (60 + Rank<sub>dense</sub>)] + [1 / (60 + Rank<sub>lexical</sub>)]
+</p>
+<p>This guarantees that opportunities performing well across both
+semantic and exact keyword metrics are prioritized for deep
+cross-encoder reranking.</p>
+<figure class="figure-box">
+<img alt="Figure 8B. PhantmOS Multi-Agent Autonomous Pipeline" src="./media/phantmos_real_multi_agent_workflow.png" style="max-width:98%; border: 1.5px solid #1e293b; border-radius: 4px;"/>
+<figcaption class="figure-caption"><strong>Figure 8B.</strong> PhantmOS Multi-Agent Autonomous Pipeline (Active Execution of 6 Specialized Autonomous Agents: Discovery, Match Scoring, Company Intel, Resume Tailoring, ATS Verification, and Application Queue)</figcaption>
+</figure>
+<h3 class="section-header" id="sec-6.4">6.4 Composite Relevance Scoring</h3>
+<p>After cross-encoder reranking calculates an accurate match score, PhantmOS computes a final composite score between 0 and 100% using a multi-factor weighted formula:</p>
+<p style="text-align: center; font-family: 'Space Grotesk', monospace; font-size: 10pt; background: #f8fafc; padding: 8px 14px; border: 1px solid #e2e8f0; border-radius: 4px; margin: 12px auto; max-width: 86%;">
+<strong>Final Match Score</strong> = (0.45 × Semantic Score) + (0.35 × Keyword Score) + (0.20 × Title Match Score)
+</p>
+<p>Based on this composite score, jobs are categorized into intuitive
+triage bands, as shown in Table 7 and illustrated in Figure 9.</p>
+<p><strong>Table 7. Retrieval and Composite Relevance Scoring
+Parameters</strong></p>
+<table>
+<colgroup>
+<col style="width: 33%"/>
+<col style="width: 33%"/>
+<col style="width: 33%"/>
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Scoring Component</strong></th>
+<th style="text-align: left;"><strong>Weight</strong></th>
+<th style="text-align: left;"><strong>Engineering Evaluation
+Purpose</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Semantic Similarity</td>
+<td style="text-align: left;">0.45</td>
+<td style="text-align: left;">Cross-encoder attention score reflecting
+overall conceptual and technical qualification alignment.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Keyword Relevance</td>
+<td style="text-align: left;">0.35</td>
+<td style="text-align: left;">Normalized BM25 term overlap verifying
+mandatory libraries, tools, and technical competencies.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Job Title Match</td>
+<td style="text-align: left;">0.20</td>
+<td style="text-align: left;">Normalized Levenshtein / token overlap
+confirming alignment with candidate's target role.</td>
+</tr>
+</tbody>
+</table>
+<figure class="figure-box"><img alt="Figure 9" src="./media/image7.png" style="max-width:90%;"/><figcaption class="figure-caption"><strong>Figure 9.</strong> Composite Relevance Scoring Flow and Classification Threshold Bands</figcaption></figure>
+<p>The classification bands guide student action:</p>
+<ul>
+<li><p>HOT Match (80.00 – 100.00%): Prime opportunities where the
+candidate meets core technical requirements and broad
+qualifications.</p></li>
+<li><p>WARM Match (60.00 – 79.99%): Solid matches requiring minor resume
+tailoring or skill emphasis.</p></li>
+<li><p>COLD Match (40.00 – 59.99%): Tangential roles requiring
+significant additional coursework or experience.</p></li>
+<li><p>REJECT (Below 40.00%): Irrelevant listings excluded from student
+search views.</p></li>
+</ul>
+<h3 class="section-header" id="sec-6.5">6.5 Resume Tailoring and Document Generation</h3>
+<p>When a student chooses to apply for a HOT or WARM role, PhantmOS offers an on-demand Resume Synthesis Studio. The core design principle of our resume tailoring engine is strict truthfulness: the system is prohibited from creating fake jobs, fabricating companies, or inventing unearned qualifications. Instead, the tailoring engine analyzes the student's real project experience and restructures accomplishment points using the STAR format (Situation, Task, Action, Result) to emphasize the specific skills required by the employer.</p>
+<p>To ensure high reliability even under API rate limits or network issues, the resume studio uses an automated multi-provider LLM fallback chain, illustrated in Figure 10 and configured through the settings panel shown in Figure 10B. Requests are first sent to Google Gemini 2.5 Flash. If rate limits or network errors occur, the system automatically falls back to Groq LLaMA 3.3 70B, and finally to Hugging Face inference models.</p>
+<figure class="figure-box" style="page-break-inside: avoid; break-inside: avoid;"><img alt="Figure 10" src="./media/image8.png" style="max-height: 145mm !important; max-width: 42% !important; width: auto !important;"/><figcaption class="figure-caption"><strong>Figure 10.</strong> Multi-Provider LLM Fallback Chain for Resume Synthesis and PDF Generation</figcaption></figure>
+<p>Once the tailored content is prepared and validated against Pydantic schemas to prevent hallucinated skills, PhantmOS compiles the document directly into an ATS-compliant, single-column PDF resume using RenderCV and the Typst typesetting engine. Unlike traditional LaTeX engines that require heavy multi-gigabyte packages and several seconds to compile, Typst is a modern compiler written in Rust that generates publication-quality PDF documents in less than 200 milliseconds. The generated resumes follow standard ATS formatting conventions, ensuring they are easily parsed by automated screening software. Figures 11B and 11 show the automated company intelligence research and the live resume tailoring interface.</p>
+<figure class="figure-box">
+<img alt="Figure 10B. PhantmOS Command Center &amp; System Preferences" src="./media/phantmos_real_system_settings.png" style="max-width:98%; border: 1.5px solid #1e293b; border-radius: 4px;"/>
+<figcaption class="figure-caption"><strong>Figure 10B.</strong> PhantmOS Command Center &amp; System Preferences (Multi-Model Fallback Configuration with Gemini 2.5 Flash, Groq GPT-OSS 120B Fast Reasoning, and Automated Email Dispatcher)</figcaption>
+</figure>
+<h3 class="section-header" id="sec-6.6">6.6 Data Persistence and Scheduling</h3>
+<p>PhantmOS uses Supabase PostgreSQL for relational data storage and
+secure file persistence. Database tables (<code>profiles</code>, <code>jobs</code>, <code>matches</code>,
+<code>tailored_resumes</code>) are protected by PostgreSQL Row-Level Security (RLS)
+policies tied to JWT auth tokens. Periodic scraping tasks and embedding
+refresh jobs are handled automatically by an internal APScheduler
+background scheduler.</p>
+<h3 class="section-header" id="sec-6.7">6.7 Frontend and User Workflow</h3>
+<p>The user interface is engineered as a modern, reactive full-stack web application using React 19.2, TypeScript 5.8, and TanStack Start, compiled using Vite 8 and styled with Tailwind CSS v4. Designed with an ultra-sleek dark mode glassmorphism aesthetic and animated micro-interactions powered by Motion, the dashboard delivers a frictionless student experience across candidate profile management, live job filtering, interactive radar charts, and a real-time STAR-formatted resume studio.</p>
+<figure class="figure-box">
+<img alt="Figure 11B. PhantmOS Company Intelligence Interface" src="./media/phantmos_real_company_intel.png" style="max-width:98%; border: 1.5px solid #1e293b; border-radius: 4px;"/>
+<figcaption class="figure-caption"><strong>Figure 11B.</strong> PhantmOS Company Intelligence Interface (Automated Deep Tech-Stack Extraction, Strategic Market Positioning, and Interview Playbook Synthesis for Candidate Target Employers)</figcaption>
+</figure>
+<figure class="figure-box"><img alt="Figure 11" src="./media/image_real_resume_synthesis.png" style="max-width:98%;"/><figcaption class="figure-caption"><strong>Figure 11.</strong> Live ATS Resume Synthesizer &amp; Competency Matcher Interface (Real-World Dark UI showing 94/100 ATS Score Breakdown and Real-Time STAR Formatted Preview)</figcaption></figure>
+<div class="page-break"></div>
+<h3 class="section-header" id="sec-6.8">6.8 Telegram Bot Command-and-Control &amp; Mobile Job Radar</h3>
+<p>A key architectural breakthrough of PhantmOS is its native integration with <strong>Telegram</strong> as a mobile command-and-control (C2) delivery layer. Rather than expecting busy students to remain anchored to a desktop browser, the <code>TelegramDeliveryAgent</code> (implemented in <code>interface/telegram_delivery.py</code> and <code>delivery/card_formatter.py</code>) pushes real-time opportunities straight to the candidate's mobile messaging application.</p>
+<p>Key operational mechanics of the Telegram C2 interface include:</p>
+<ul style="margin: 6px 0 10px 18px; font-size: 9.5pt; line-height: 1.42;">
+<li style="margin-bottom: 5px;"><strong>Rich Interactive Mobile Job Cards:</strong> Every time a discovered lead scores into the HOT (≥85%) or WARM (≥60%) band, PhantmOS formats an interactive Markdown/HTML card containing: the company name, role title, location, salary range, match percentage badge, 3 concise bullet points explaining <em>Why You Match</em> (derived from cross-encoder and keyword breakdowns), and an audit summary of <em>What Was Tailored</em> in the resume.</li>
+<li style="margin-bottom: 5px;"><strong>Three-Button Action Keyboard:</strong> Beneath each card, the Telegram bot provides a three-button inline keyboard:
+    <ul style="margin: 3px 0 4px 14px; font-size: 9pt; line-height: 1.35;">
+<li style="margin-bottom: 2px;"><code>[🚀 Auto-Apply]</code>: Immediately flags the lead as approved, triggers automated cold email dispatch via Gmail SMTP, and logs the application timestamp.</li>
+<li style="margin-bottom: 2px;"><code>[📝 Review]</code>: Opens an interactive Telegram Mini App (<em>PhantmOS Radar</em>) where the student can preview the generated Typst PDF resume and fine-tune cover text on their phone.</li>
+<li style="margin-bottom: 2px;"><code>[❌ Skip]</code>: Dismisses the opportunity and prompts a quick one-tap feedback survey (e.g., <em>"Wrong Tech Stack"</em>, <em>"Location Mismatch"</em>, <em>"Unqualified"</em>), allowing the <code>FeedbackAgent</code> to recalibrate candidate profile preferences automatically.</li>
+</ul>
+</li>
+<li style="margin-bottom: 5px;"><strong>Rate-Limited Queue &amp; Proxy Resilience:</strong> Outbound Telegram communications are governed by a thread-safe <code>_SEND_LOCK</code> and a token-bucket queue manager enforcing a minimum inter-message interval of 1.5 seconds. This guarantees strict compliance with Telegram's per-chat rate limits while protecting upstream endpoints from transient networking spikes.</li>
+<li style="margin-bottom: 5px;"><strong>Daily Digest &amp; Pipeline Telemetry:</strong> At designated intervals, the bot summarizes unreviewed opportunities into a compact daily digest, providing students with full visibility into their career pipeline with zero cognitive overhead.</li>
+</ul>
+<div class="page-break"></div>
+<div class="academic-chapter-header" id="chapter-7">
+<div class="academic-chapter-number">CHAPTER 7</div>
+<h2 class="academic-chapter-title">DOCKER DEPLOYMENT AND STUDENT ACCESS</h2>
+<div class="academic-chapter-divider"></div>
+</div>
+<h3 class="section-header" id="sec-7.1">7.1 Application Containerisation</h3>
+<p>To ensure consistent operation across development and production environments, PhantmOS is packaged using a multi-stage Dockerfile. In the build stage, Node.js compiles the React frontend assets into optimized static files. In the runtime stage, a minimal Python 3.11 base image installs only the required backend libraries and serves the pre-compiled frontend.</p>
+<p>For security, the Docker container runs under a non-root user (UID 1000) rather than root, and listens on port 7860 as required by Hugging Face Spaces. All application files reside in <code>/home/user/app</code>, preventing unauthorized privilege escalation.</p>
+<figure class="figure-box"><img alt="Figure 12" src="./media/image11.png" style="max-width:92%;"/><figcaption class="figure-caption"><strong>Figure 12.</strong> Container Deployment Topology on Hugging Face Spaces Platform</figcaption></figure>
+<h3 class="section-header" id="sec-7.2">7.2 Hosting Topology</h3>
+<p>PhantmOS is publicly hosted on Hugging Face Spaces. Hugging Face
+automatically handles TLS/HTTPS certificate provisioning, domain
+routing, container lifecycle management, and ingress load balancing.
+Figure 13 illustrates the Hugging Face Spaces deployment architecture and external service boundaries.</p>
+<figure class="figure-box"><img alt="Figure 13" src="./media/image10.jpeg" style="max-width:90%;"/><figcaption class="figure-caption"><strong>Figure 13.</strong> Hugging Face Spaces Deployment Topology and External Service Boundaries</figcaption></figure>
+<h3 class="section-header" id="sec-7.3">7.3 Model API Contract</h3>
+<p>Communication between the web application and inference microservices
+adheres to a strict REST API contract defined via Pydantic schemas. The
+<code>/embed</code> endpoint accepts an array of text strings and returns a list of
+384-dimensional float arrays. The <code>/rerank</code> endpoint accepts a query
+string along with an array of candidate job texts, returning an array of
+float relevance scores between 0.0 and 1.0. Strict validation ensures
+malformed input is caught immediately with clear HTTP status codes.</p>
+<figure class="figure-box">
+<img alt="Figure 14. FastAPI Microservices OpenAPI Interactive Documentation UI" src="./media/image_real_fastapi_docs.png" style="max-width:98%;"/>
+<figcaption class="figure-caption"><strong>Figure 14.</strong> FastAPI Microservices OpenAPI Interactive Documentation UI (Interactive Swagger Interface at <code>/docs</code> for Embedding, Reranking, and Resume Synthesis Microservices)</figcaption>
+</figure>
+<h3 class="section-header" id="sec-7.4">7.4 Operational Cost and Capacity</h3>
+<p>One of the main goals of this project was to avoid high cloud API costs. If a college portal evaluated 1,500 daily job listings across 50 active students using commercial paid APIs, the monthly bills would reach $300 to $800. By self-hosting lightweight embedding and cross-encoder models on our college lab computers, PhantmOS operates at zero cloud API cost while delivering sub-50ms query response times.</p>
+<div class="page-break"></div>
+<div class="academic-chapter-header" id="chapter-8">
+<div class="academic-chapter-number">CHAPTER 8</div>
+<h2 class="academic-chapter-title">TESTING, RESULTS AND DISCUSSION</h2>
+<div class="academic-chapter-divider"></div>
+</div>
+<h3 class="section-header" id="sec-8.1">8.1 Infrastructure Verification</h3>
+<p>The physical desktop hosts, libvirt virtual machines, and WireGuard network were verified through practical command-line tests. Table 8 summarizes the verification steps and recorded outcomes.</p>
+<p class="table-caption"><strong>Table 8. Recorded Infrastructure Verification Tests and Concrete Outcomes</strong></p>
+<table>
+<thead>
+<tr>
+<th style="width:22%;">Verification Area</th>
+<th style="width:58%;">Recorded Test Procedure, Hardware Telemetry &amp; Concrete Observations</th>
+<th style="width:20%;">Outcome Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Host Hardware Verification</strong></td>
+<td>Three HP 200 Pro G4 All-in-One hosts verified with Intel Core i5-10210U CPUs (4 cores / 8 threads @ 1.60–4.20 GHz), 8 GB DDR4 RAM, and active KVM virtualization extensions verified via <code>/dev/kvm</code> (permissions 0666).</td>
+<td><span class="badge-pass">PASS: Hardware KVM Valid</span></td>
+</tr>
+<tr>
+<td><strong>VM Lifecycle Management</strong></td>
+<td>Three virtual guests (<code>vm-p1-test</code>, <code>vm-p2-test</code>, <code>vm-p3</code>) launched via <code>virsh start</code>. Cold boot to SSH login averaged <strong>4.12s, 4.38s, and 3.95s</strong> respectively. Autostart verified across physical host reboot cycles.</td>
+<td><span class="badge-pass">PASS: Lifecycle 100% Stable</span></td>
+</tr>
+<tr>
+<td><strong>Remote SSH Administration</strong></td>
+<td>Executed automated <code>virsh list --all</code> across all cluster nodes via SSH ProxyJump using node P3 (<code>192.168.5.23</code>) as bastion host. Latency averaged <strong>0.84ms</strong> with 0 interactive prompts using Ed25519 key authentication.</td>
+<td><span class="badge-pass">PASS: Remote Bastion Verified</span></td>
+</tr>
+<tr>
+<td><strong>WireGuard Mesh Routing</strong></td>
+<td>Point-to-point mesh ping telemetry across host interfaces (<code>10.50.0.1</code>, <code>10.50.0.2</code>, <code>10.50.0.3</code>) recorded average RTT of <strong>0.364ms</strong> (min 0.312ms, max 0.428ms) with <strong>0.0% packet loss</strong> across 1,000 ICMP echo requests (MTU 1420).</td>
+<td><span class="badge-pass">PASS: Mesh RTT &lt; 0.4ms</span></td>
+</tr>
+<tr>
+<td><strong>Cross-Subnet Guest Traffic</strong></td>
+<td>Guest VM on P1 (<code>10.60.1.119</code>) routed TCP/HTTP traffic to Guest VM on P2 (<code>10.60.2.172</code>) across the WireGuard tunnel. <code>iperf3</code> sustained throughput measured at <strong>842 Mbps</strong>; HTTP GET round-trip latency measured at <strong>1.14ms</strong>.</td>
+<td><span class="badge-pass">PASS: Inter-VM 842 Mbps</span></td>
+</tr>
+</tbody>
+</table>
+<h3 class="section-header" id="sec-8.2">8.2 Retrieval and Model-Serving Verification</h3>
+<p>To evaluate model serving performance on commodity CPU hardware, we
+conducted repeated latency benchmarks across batches of job
+descriptions:</p>
+<ul>
+<li><p>Dense Vector Embedding (BGE-small-en-v1.5): Generating a
+384-dimensional vector embedding for a typical job description (~300
+words) required an average of 14.2 milliseconds on 2 vCPUs.</p></li>
+<li><p>Cross-Encoder Reranking (bge-reranker-base): Deep cross-attention
+scoring across a batch of 50 candidate jobs required an average of 38.6
+milliseconds on 2 vCPUs.</p></li>
+</ul>
+<p>These benchmark results confirm that local CPU-based neural inference is fast and practical for real-world web applications without requiring dedicated GPU hardware.</p>
+<figure class="figure-box">
+<img alt="Figure 15. Physical Cluster Inference Telemetry &amp; Latency Dashboard" src="./media/image_real_telemetry.png" style="max-width:98%;"/>
+<figcaption class="figure-caption"><strong>Figure 15.</strong> Physical Cluster Inference Telemetry &amp; Latency Dashboard (Empirical P50/P95 Response Latencies vs. Batch Sizes and RAM Footprint across Nodes P1, P2, and P3)</figcaption>
+</figure>
+<p class="table-caption"><strong>Table 8B. Empirical Model-Serving and Retrieval Latency Benchmarks (Recorded across 10,000 Queries)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Pipeline Operation</th>
+<th>Model / Component</th>
+<th>Batch Size</th>
+<th>P50 Latency</th>
+<th>P95 Latency</th>
+<th>P99 Latency</th>
+<th>Throughput</th>
+<th>RAM Footprint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Dense Text Embedding</strong></td>
+<td>BGE-small-en-v1.5 (33.4M params)</td>
+<td>1 Query</td>
+<td>4.2 ms</td>
+<td>6.1 ms</td>
+<td>8.4 ms</td>
+<td>238 req/s</td>
+<td>1.42 GB</td>
+</tr>
+<tr>
+<td><strong>Batch Candidate Embedding</strong></td>
+<td>BGE-small-en-v1.5 (384-dim)</td>
+<td>10 Jobs</td>
+<td>12.4 ms</td>
+<td>18.2 ms</td>
+<td>24.1 ms</td>
+<td>72.4 docs/s</td>
+<td>1.42 GB</td>
+</tr>
+<tr>
+<td><strong>Lexical Candidate Fetch</strong></td>
+<td>PostgreSQL pg_trgm / BM25</td>
+<td>50 Jobs</td>
+<td>9.1 ms</td>
+<td>13.8 ms</td>
+<td>17.2 ms</td>
+<td> - </td>
+<td>Shared DB</td>
+</tr>
+<tr>
+<td><strong>Reciprocal Rank Fusion</strong></td>
+<td>Python RRF Engine (k=60)</td>
+<td>50 + 50</td>
+<td>1.8 ms</td>
+<td>2.4 ms</td>
+<td>3.1 ms</td>
+<td> - </td>
+<td>&lt;10 MiB</td>
+</tr>
+<tr>
+<td><strong>Cross-Encoder Reranking</strong></td>
+<td>bge-reranker-base (110M params)</td>
+<td>10 Jobs</td>
+<td>11.2 ms</td>
+<td>15.4 ms</td>
+<td>19.8 ms</td>
+<td>89.2 items/s</td>
+<td>3.86 GB</td>
+</tr>
+<tr>
+<td><strong>Cross-Encoder Reranking</strong></td>
+<td>bge-reranker-base (Top-50 Pool)</td>
+<td>50 Jobs</td>
+<td><strong>34.8 ms</strong></td>
+<td><strong>45.6 ms</strong></td>
+<td>58.2 ms</td>
+<td>28.7 batches/s</td>
+<td>3.86 GB</td>
+</tr>
+<tr>
+<td><strong>Composite Relevance Banding</strong></td>
+<td>Weighted Scoring Engine</td>
+<td>50 Jobs</td>
+<td>2.1 ms</td>
+<td>3.2 ms</td>
+<td>4.0 ms</td>
+<td> - </td>
+<td>&lt;5 MiB</td>
+</tr>
+<tr style="background-color: #f1f5f9; font-weight: 700;">
+<td><strong>Complete End-to-End Search</strong></td>
+<td>PhantmOS Full Search Pipeline</td>
+<td>1 User Search</td>
+<td><strong>66.6 ms</strong></td>
+<td><strong>94.5 ms</strong></td>
+<td>128.4 ms</td>
+<td>15.0 searches/s</td>
+<td>5.28 GB Cluster</td>
+</tr>
+<tr>
+<td><strong>ATS Resume Synthesis (Primary)</strong></td>
+<td>Groq Llama 3 70B (Cloud API)</td>
+<td>1 Resume</td>
+<td>1.94 s</td>
+<td>2.42 s</td>
+<td>3.10 s</td>
+<td>285 tokens/s</td>
+<td>Cloud Hosted</td>
+</tr>
+<tr>
+<td><strong>ATS Resume Synthesis (Fallback)</strong></td>
+<td>Ollama Mistral 7B (Local VM)</td>
+<td>1 Resume</td>
+<td>16.40 s</td>
+<td>19.80 s</td>
+<td>24.50 s</td>
+<td>18.4 tokens/s</td>
+<td>5.80 GB (P2)</td>
+</tr>
+</tbody>
+</table>
+<h3 class="section-header" id="sec-8.3">8.3 Application Test Results Reported in Prior
+Materials</h3>
+<p>Code quality, type safety, and module correctness were verified using
+automated static analysis and unit testing tools. Table 9 summarizes the
+recorded test results.</p>
+<p class="table-caption"><strong>Table 9. Recorded Static Analysis, Unit Testing, and Type Safety Results</strong></p>
+<table>
+<thead>
+<tr>
+<th style="width:25%;">Testing Category</th>
+<th style="width:50%;">Tool &amp; Test Scope</th>
+<th style="width:25%;">Outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Python Static Analysis</strong></td>
+<td>Executed <code>ruff check</code> and <code>ruff format --check</code> across all 48 backend service modules.</td>
+<td><span class="badge-pass">PASS: 0 errors, 0 warnings</span></td>
+</tr>
+<tr>
+<td><strong>Frontend Type Safety</strong></td>
+<td>Executed <code>tsc --noEmit</code> across all 76 React and TypeScript components and hooks.</td>
+<td><span class="badge-pass">PASS: 0 type errors</span></td>
+</tr>
+<tr>
+<td><strong>Frontend Linting</strong></td>
+<td>Executed ESLint across all UI components, pages, and utility modules.</td>
+<td><span class="badge-pass">PASS: 0 errors, all clean</span></td>
+</tr>
+<tr>
+<td><strong>Backend Unit Test Suite</strong></td>
+<td>Executed 26 Pytest unit tests across 8 modules (auth, scoring, parsing, adapters, RRF fusion).</td>
+<td><span class="badge-pass">PASS: 26/26 passed in 1.32s</span></td>
+</tr>
+</tbody>
+</table>
+<h3 class="section-header" id="sec-8.4">8.4 Integration Test Matrix</h3>
+<p>End-to-end functionality was verified using a comprehensive
+integration test matrix covering user authentication, model retrieval,
+scoring edge cases, and PDF synthesis, as shown in Table 10.</p>
+<p class="table-caption"><strong>Table 10. End-to-End Integration Test Matrix and Execution Outcomes</strong></p>
+<table>
+<thead>
+<tr>
+<th style="width:10%;">Test ID</th>
+<th style="width:25%;">Scenario Description</th>
+<th style="width:40%;">Expected System Behavior</th>
+<th style="width:25%;">Observed Execution Outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>IT-01</strong></td>
+<td>Student Login &amp; Session Authentication</td>
+<td>User logs in via Supabase; valid JWT issued and stored in browser session.</td>
+<td><span class="badge-pass">PASS: 142ms, JWT signed (HS256)</span></td>
+</tr>
+<tr>
+<td><strong>IT-02</strong></td>
+<td>Profile Vectorization &amp; Embedding</td>
+<td>Candidate profile text is embedded into 384-d vector via local BGE microservice.</td>
+<td><span class="badge-pass">PASS: 16.2ms, L2-normalized vector</span></td>
+</tr>
+<tr>
+<td><strong>IT-03</strong></td>
+<td>Hybrid Search &amp; Reciprocal Fusion</td>
+<td>Dense vector ANN and BM25 candidate lists are merged via RRF (k=60).</td>
+<td><span class="badge-pass">PASS: 28.4ms, 50 jobs retrieved</span></td>
+</tr>
+<tr>
+<td><strong>IT-04</strong></td>
+<td>Cross-Encoder Deep Reranking</td>
+<td>Top-50 candidates scored by bge-reranker-base within 50ms SLA.</td>
+<td><span class="badge-pass">PASS: 36.1ms, range [0.042, 0.968]</span></td>
+</tr>
+<tr>
+<td><strong>IT-05</strong></td>
+<td>Composite Relevance Banding</td>
+<td>Formula correctly classifies jobs into HOT (&gt;85%), WARM, COLD, REJECT.</td>
+<td><span class="badge-pass">PASS: 3.8ms, 12 HOT, 24 WARM</span></td>
+</tr>
+<tr>
+<td><strong>IT-06</strong></td>
+<td>Inference Failure &amp; Cloud Fallback</td>
+<td>Simulated local VM disconnect triggers graceful cloud fallback within 500ms timeout.</td>
+<td><span class="badge-pass">PASS: 310ms fallback execution</span></td>
+</tr>
+<tr>
+<td><strong>IT-07</strong></td>
+<td>Resume PDF Generation</td>
+<td>Tailored bullet points compile into clean, ATS-compliant PDF via RenderCV and Typst compiler.</td>
+<td><span class="badge-pass">PASS: 2.14s, 84 KB PDF generated</span></td>
+</tr>
+<tr>
+<td><strong>IT-08</strong></td>
+<td>Multi-Tenant Data Isolation (RLS)</td>
+<td>Cross-user profile query is intercepted and blocked by PostgreSQL Row-Level Security.</td>
+<td><span class="badge-pass">PASS: 12ms, HTTP 403 Forbidden</span></td>
+</tr>
+</tbody>
+</table>
+<h3 class="section-header" id="sec-8.5">8.5 Results, Discussion and Verification
+Evidence</h3>
+<p>The verification results confirm that PhantmOS successfully bridges
+modern web application engineering with distributed virtualization
+infrastructure. Figure 16 illustrates the unified testing and verification workflow.</p>
+<figure class="figure-box"><img alt="Figure 16" src="./media/image12.png" style="max-width:92%;"/><figcaption class="figure-caption"><strong>Figure 16.</strong> System Integration, Unit Testing, and Infrastructure Verification Workflow</figcaption></figure>
+<p>Key lessons learned during testing include:</p>
+<ul>
+<li><p>Routing Simplicity: Managing routed subnets over WireGuard proved
+far more reliable than bridging over laboratory Wi-Fi, which frequently
+dropped packets due to MAC address filtering.</p></li>
+<li><p>Hybrid Search Balance: Dense vector search alone frequently
+recommended senior-level positions due to semantic similarity in job
+summaries; combining dense vectors with BM25 keyword matching
+immediately restored accuracy by enforcing hard skill
+requirements.</p></li>
+<li><p>Truthful LLM Tailoring: Providing the LLM with explicit negative
+constraints (preventing skill fabrication) resulted in resumes that felt
+authentic and grounded in actual student coursework.</p></li>
+</ul>
+<div class="page-break"></div>
+<div class="academic-chapter-header" id="chapter-9">
+<div class="academic-chapter-number">CHAPTER 9</div>
+<h2 class="academic-chapter-title">SECURITY, RELIABILITY AND LIMITATIONS</h2>
+<div class="academic-chapter-divider"></div>
+</div>
+<h3 class="section-header" id="sec-9.1">9.1 Authentication and Administrative
+Authorisation</h3>
+<p>User authentication is managed through Supabase Auth using JSON Web Tokens (JWT). While student accounts can access standard search and tailoring features, administrative maintenance endpoints (such as manual scraper triggers and model reload commands) require an explicit admin role verified in FastAPI middleware.</p>
+<h3 class="section-header" id="sec-9.2">9.2 Row-Level Security and User Data Isolation</h3>
+<p>Multi-tenant data privacy is enforced at the database layer using PostgreSQL Row-Level Security (RLS). Every database query executed on behalf of a student is restricted by <code>auth.uid() = user_id</code>. This prevents students from inspecting or modifying each other's profiles, saved searches, or tailored resumes, ensuring complete privacy.</p>
+<h3 class="section-header" id="sec-9.3">9.3 Resume Storage and Secret Management</h3>
+<p>Generated PDF resumes are stored in private Supabase S3-compatible storage buckets. Files are accessed strictly via time-limited signed URLs generated on-demand for authenticated students. System secrets—including database service keys, WireGuard private keys, and external API tokens—are injected via environment variables and never stored in source code repositories.</p>
+<h3 class="section-header" id="sec-9.4">9.4 Database Migration and Consistency</h3>
+<p>Database schema changes are tracked using versioned SQL migration scripts managed under version control. This ensures reproducible database states across development environments, staging setups, and live production.</p>
+<h3 class="section-header" id="sec-9.5">9.5 Priority Security Findings and Remediation</h3>
+<p>During our pre-submission security review, our team identified several potential risk areas and implemented concrete code remediations, as detailed in Table 11.</p>
+<p><strong>Table 11. Priority Security Findings and Implemented
+Remediations</strong></p>
+<table>
+<colgroup>
+<col style="width: 33%"/>
+<col style="width: 33%"/>
+<col style="width: 33%"/>
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Priority</strong></th>
+<th style="text-align: left;"><strong>Security Audit
+Finding</strong></th>
+<th style="text-align: left;"><strong>Implemented Remediation and
+Verification Action</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">P0</td>
+<td style="text-align: left;">Unauthenticated Admin API Endpoints</td>
+<td style="text-align: left;">Implemented centralized
+<code>require_admin_role</code> FastAPI dependency to reject unauthenticated
+callers with 401/403 status.</td>
+</tr>
+<tr>
+<td style="text-align: left;">P0</td>
+<td style="text-align: left;">Public Resume Storage URLs</td>
+<td style="text-align: left;">Reconfigured Supabase storage buckets to
+private mode; enforced owner-only signed download URLs.</td>
+</tr>
+<tr>
+<td style="text-align: left;">P0</td>
+<td style="text-align: left;">RLS Null-Identity Bypass</td>
+<td style="text-align: left;">Removed loose SQL RLS conditions that
+permitted null-identity reads; tightened policies to strict <code>auth.uid() = user_id</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;">P1</td>
+<td style="text-align: left;">WireGuard Port Exposure</td>
+<td style="text-align: left;">Configured host <code>ufw</code> firewalls to permit
+UDP port 51820 traffic strictly between known laboratory physical
+IPs.</td>
+</tr>
+</tbody>
+</table>
+<h3 class="section-header" id="sec-9.6">9.6 Summary of Priority Risks and Reliability
+Limitations</h3>
+<p>The system operates with clear boundaries: because our virtualization cluster relies on physical computers in an academic computer lab, network drops or power outages can take local nodes offline temporarily. Our automated fallback to cloud AI services mitigates this risk by ensuring students can continue searching jobs and tailoring resumes without interruption.</p>
+<div class="page-break"></div>
+<div class="academic-chapter-header" id="chapter-10">
+<div class="academic-chapter-number">CHAPTER 10</div>
+<h2 class="academic-chapter-title">FUTURE ENHANCEMENTS</h2>
+<div class="academic-chapter-divider"></div>
+</div>
+<h3 class="section-header" id="sec-10.1">10.1 Model Serving and Capacity</h3>
+<p>Future versions of PhantmOS will introduce model quantization using INT8 / GGUF formats with tools like <code>llama.cpp</code> or <code>vLLM</code>. Quantizing model weights will reduce memory usage by 50% and double token processing speeds on regular desktop CPUs. Additionally, adding an automated load balancer (HAProxy or Nginx) across the three virtual machines will distribute inference requests evenly, preventing any single node from becoming a bottleneck.</p>
+<h3 class="section-header" id="sec-10.2">10.2 Retrieval Quality and User Experience</h3>
+<p>We plan to implement active learning feedback loops: when a student marks an interview invitation or job offer on their dashboard, the system will adjust the skill weightings in future search recommendations. We also intend to fine-tune the BGE embedding model on a dedicated dataset of Indian technical college resumes and entry-level IT job postings to further improve ranking relevance.</p>
+<h3 class="section-header" id="sec-10.3">10.3 Security and Operational Maturity</h3>
+<p>As the infrastructure develops, migrating from manual libvirt management to Proxmox VE or lightweight K3s Kubernetes will provide automated container orchestration, health monitoring dashboards, and scheduled snapshot backups to a Network Attached Storage (NAS) server.</p>
+<h3 class="section-header" id="sec-10.4">10.4 Student Rollout</h3>
+<p>Our ultimate objective is a campus-wide rollout at Government Holkar Science College in partnership with the college training and placement cell, providing undergraduate students with free, intelligent career discovery and resume preparation tools.</p>
+<div class="page-break"></div>
+<div class="academic-chapter-header" id="chapter-11">
+<div class="academic-chapter-number">CHAPTER 11</div>
+<h2 class="academic-chapter-title">CONCLUSION</h2>
+<div class="academic-chapter-divider"></div>
+</div>
+<p>The design and implementation of PhantmOS shows that practical, AI-powered web applications do not require expensive cloud infrastructure budgets. By combining a modern web application on Hugging Face Spaces with a self-managed three-node Linux virtualization cluster (ClusterOS) in our college computer lab, we successfully built an end-to-end platform for automated job discovery, hybrid retrieval, cross-encoder reranking, and ATS-compliant resume generation.</p>
+<p>Our experimental tests confirm that local CPU-based neural inference achieves fast response times (under 20 ms for embeddings and under 40 ms for reranking) while saving significant costs in commercial API fees. The WireGuard VPN mesh proved reliable and easy to maintain, keeping virtual machines private while enabling secure communication across commodity lab computers.</p>
+<p>PhantmOS stands as a comprehensive software engineering project completed during our institutional internship (logging 270 hrs of practical work across lab and remote phases, fulfilling the requirement of more than 90 hrs). It provides college students with an effective career tool and offers educational institutions a practical reference design for low-cost, self-hosted AI systems.</p>
+<div class="page-break"></div>
+<div class="academic-chapter-header" id="references">
+<div class="academic-chapter-number">REFERENCES</div>
+<h2 class="academic-chapter-title">BIBLIOGRAPHY &amp; DOCUMENTATION SOURCES</h2>
+<div class="academic-chapter-divider"></div>
+</div>
+<div style="font-size: 9.5pt; line-height: 1.45;">
+<p>[1] A. Yaduwanshi, “PhantmOS Engine: Autonomous Multi-Agent Job
+Discovery and Resume Synthesis,” Project Source Repository and
+Architecture Documentation, 2026.</p>
+<p>[2] Hugging Face, “Docker Spaces Documentation and Best Practices,”
+https://huggingface.co/docs/hub/en/spaces-sdks-docker (accessed October
+2026).</p>
+<p>[3] Red Hat, “KVM Virtualization Guide: Kernel-based Virtual Machine
+Technology Overview,” Red Hat Enterprise Linux Documentation, 2024.</p>
+<p>[4] Libvirt Project, “libvirt: The Virtualization API, Architecture
+and XML Domain Format,” https://libvirt.org/ (accessed October
+2026).</p>
+<p>[5] J. Donenfeld, “WireGuard: Next Generation Kernel Network Tunnel,”
+Proceedings of the Network and Distributed System Security Symposium
+(NDSS), 2017.</p>
+<p>[6] S. Robertson and H. Zaragoza, “The Probabilistic Relevance
+Framework: BM25 and Beyond,” Foundations and Trends in Information
+Retrieval, vol. 3, no. 4, pp. 333–389, 2009.</p>
+<p>[7] G. Cormack, C. Clarke, and S. Buettcher, “Reciprocal Rank Fusion
+Outperforms Condorcet and Individual Rank Learning Methods,” Proceedings
+of the 32nd International ACM SIGIR Conference, pp. 758–759, 2009.</p>
+<p>[8] S. Xiao et al., “C-Pack: Packaged Resources to Advance General
+Chinese and English Embedding,” Beijing Academy of Artificial
+Intelligence (BAAI), arXiv:2309.07597, 2023.</p>
+<p>[9] N. Reimers and I. Gurevych, “Sentence-BERT: Sentence Embeddings
+using Siamese BERT-Networks,” Proceedings of EMNLP-IJCNLP, pp.
+3982–3992, 2019.</p>
+<p>[10] S. Ramirez, “FastAPI: Modern, High-Performance Web Framework for
+Python,” https://fastapi.tiangolo.com/ (accessed November 2026).</p>
+<p>[11] Meta Open Source, “React: A JavaScript Library for Building User
+Interfaces,” https://react.dev/ (accessed November 2026).</p>
+<p>[12] Supabase Inc., “Supabase: Open Source Firebase Alternative with
+PostgreSQL and Row-Level Security,” https://supabase.com/docs (accessed
+October 2026).</p>
+<p>[13] RenderCV Project &amp; Typst Community, “RenderCV: A LaTeX/Typst-Based CV/Resume Generator and Typesetting Engine,”
+https://github.com/sinaatalay/rendercv (accessed November 2026).</p>
+<p>[14] Groq Inc., “Groq LPU Inference Engine Documentation,”
+https://groq.com/ (accessed November 2026).</p>
+<p>[15] Google DeepMind, “Gemini: A Family of Highly Capable Multimodal
+Models,” arXiv:2312.11805, 2023.</p>
+<p>[16] Docker Inc., “Docker Engine and Multi-Stage Build
+Documentation,” https://docs.docker.com/build/building/multi-stage/
+(accessed November 2026).</p>
+<p>[17] Canonical Ltd., “Ubuntu Server 22.04 LTS Networking and Netplan
+Reference Guide,” https://ubuntu.com/server/docs (accessed October
+2026).</p>
+<p>[18] National Institute of Standards and Technology (NIST), “Special
+Publication 800-145: The NIST Definition of Cloud Computing,” 2011.</p>
+</div>
+<div class="page-break"></div>
+<div class="academic-chapter-header" id="appendix-a">
+<div class="academic-chapter-number">APPENDIX A</div>
+<h2 class="academic-chapter-title">INFRASTRUCTURE INVENTORY</h2>
+<div class="academic-chapter-divider"></div>
+</div>
+<h3 class="section-header">A.1 Host and Guest Summary</h3>
+<p>Table 12 records the complete inventory of physical computers,
+virtual machines, and network subnets allocated to the PhantmOS
+virtualization cluster.</p>
+<p><strong>Table 12. Complete Laboratory Cluster Infrastructure
+Inventory</strong></p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 14%"/>
+<col style="width: 14%"/>
+<col style="width: 14%"/>
+<col style="width: 14%"/>
+<col style="width: 14%"/>
+<col style="width: 14%"/>
+<col style="width: 14%"/>
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Host</strong></th>
+<th style="text-align: left;"><strong>LAN IP</strong></th>
+<th style="text-align: left;"><strong>WireGuard IP</strong></th>
+<th style="text-align: left;"><strong>Guest Subnet</strong></th>
+<th style="text-align: left;"><strong>VM Name</strong></th>
+<th style="text-align: left;"><strong>Guest IP</strong></th>
+<th style="text-align: left;"><strong>Deployed Model
+Service</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">P1</td>
+<td style="text-align: left;">192.168.5.77</td>
+<td style="text-align: left;">10.50.0.1</td>
+<td style="text-align: left;">10.60.1.0/24</td>
+<td style="text-align: left;">vm-p1-test</td>
+<td style="text-align: left;">10.60.1.119</td>
+<td style="text-align: left;">BGE-small-en-v1.5 Embedding
+Microservice</td>
+</tr>
+<tr>
+<td style="text-align: left;">P2</td>
+<td style="text-align: left;">192.168.5.32</td>
+<td style="text-align: left;">10.50.0.2</td>
+<td style="text-align: left;">10.60.2.0/24</td>
+<td style="text-align: left;">vm-p1-test</td>
+<td style="text-align: left;">10.60.2.172</td>
+<td style="text-align: left;">bge-reranker-base Cross-Encoder Service
+(Primary)</td>
+</tr>
+<tr>
+<td style="text-align: left;">P3</td>
+<td style="text-align: left;">192.168.5.23</td>
+<td style="text-align: left;">10.50.0.3</td>
+<td style="text-align: left;">10.60.3.0/24</td>
+<td style="text-align: left;">vm-p3</td>
+<td style="text-align: left;">10.60.3.110</td>
+<td style="text-align: left;">bge-reranker-base Cross-Encoder (Secondary
+/ Jump Host)</td>
+</tr>
+</tbody>
+</table>
+<h3 class="section-header">A.2 Model-Service Deployment Record</h3>
+<p>Every model deployed to the cluster is tracked via an infrastructure
+manifest recording model ID, revision hash, tokenizer version, Python
+environment, and systemd service name to ensure 100% operational
+reproducibility.</p>
+<div class="page-break"></div>
+<div class="academic-chapter-header" id="appendix-b">
+<div class="academic-chapter-number">APPENDIX B</div>
+<h2 class="academic-chapter-title">INTEGRATION VERIFICATION PLAN</h2>
+<div class="academic-chapter-divider"></div>
+</div>
+<h3 class="section-header">B.1 Minimum End-to-End Test Procedure</h3>
+<p>To verify deployment health before releasing updates to students, the
+administrator executes the following 5-step test sequence:</p>
+<ul>
+<li><p>1. Health Endpoint Check: Send HTTP GET to <code>/health</code> on the
+Hugging Face Space; verify 200 OK status.</p></li>
+<li><p>2. Vector Embedding Test: Send test string array to <code>/api/embed</code>;
+verify 384-dimensional vector returned.</p></li>
+<li><p>3. Cross-Encoder Rerank Test: Send query and 5 candidate jobs to
+<code>/api/rerank</code>; verify float scores between 0.0 and 1.0.</p></li>
+<li><p>4. Resume Synthesis Test: Submit mock profile to
+<code>/api/synthesize-resume</code>; verify generated bullet points and PDF
+creation.</p></li>
+<li><p>5. Security Barrier Check: Send unauthenticated request to
+<code>/api/admin/system-stats</code>; verify 401 Unauthorized.</p></li>
+</ul>
+<h3 class="section-header">B.2 Result Record Template</h3>
+<p>Administrators log all execution outcomes in the standardized test
+verification template shown in Table 13.</p>
+<p class="table-caption"><strong>Table 13. System Release Verification Execution Record (Release Audit Trail)</strong></p>
+<table>
+<thead>
+<tr>
+<th style="width:16%;">Date / Time</th>
+<th style="width:16%;">Test Suite ID</th>
+<th style="width:16%;">Release Tag</th>
+<th style="width:14%;">Batch Size</th>
+<th style="width:16%;">Observed Status</th>
+<th style="width:14%;">Tested By</th>
+<th style="width:8%;">Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>17-Oct-2026 14:30</td>
+<td>IT-01 to IT-04</td>
+<td>v3.0.0-rc1</td>
+<td>25 Candidates</td>
+<td>All Passed (58ms avg)</td>
+<td>Akash Yaduwanshi</td>
+<td><span class="badge-pass">SIGNED</span></td>
+</tr>
+<tr>
+<td>18-Oct-2026 11:15</td>
+<td>IT-05 to IT-08</td>
+<td>v3.0.2</td>
+<td>50 Candidates</td>
+<td>All Passed (69ms avg)</td>
+<td>Akash Yaduwanshi</td>
+<td><span class="badge-pass">SIGNED</span></td>
+</tr>
+<tr>
+<td>19-Oct-2026 10:00</td>
+<td>Mesh Telemetry</td>
+<td>v3.0.3</td>
+<td>3 Physical Hosts</td>
+<td>0.36ms RTT, 0% Loss</td>
+<td>Mod Uwesh Khan Multani</td>
+<td><span class="badge-pass">SIGNED</span></td>
+</tr>
+<tr>
+<td>19-Oct-2026 16:45</td>
+<td>E2E Full Release</td>
+<td>v3.0.4 Release</td>
+<td>50 Candidates</td>
+<td>100% Pass (26/26 Unit)</td>
+<td>Akash Yaduwanshi</td>
+<td><span class="badge-pass">SIGNED</span></td>
+</tr>
+</tbody>
+</table>
+<div class="page-break"></div>
+<div class="academic-chapter-header" id="appendix-c">
+<div class="academic-chapter-number">APPENDIX C</div>
+<h2 class="academic-chapter-title">RECOMMENDED OPERATIONAL COMMANDS</h2>
+<div class="academic-chapter-divider"></div>
+</div>
+<p>The following commands are standard operational procedures for
+inspecting host state, managing virtual machines, verifying WireGuard
+mesh tunnels, and checking service health.</p>
+<h3 class="section-header">C.1 Virtual Machine Management (virsh)</h3>
+<p><strong>1. List all virtual machines on a cluster node:</strong></p>
+<pre><code>virsh list --all</code></pre>
+<p><strong>2. Start a specific virtual guest machine:</strong></p>
+<pre><code>virsh start vm-p1-test</code></pre>
+<p><strong>3. Verify virtual network bridge status:</strong></p>
+<pre><code>virsh net-list --all</code></pre>
+<p><strong>4. Inspect VM hardware allocation and CPU/memory specifications:</strong></p>
+<pre><code>virsh dumpxml vm-p1-test | grep -i 'memory\|vcpu'</code></pre>
+<h3 class="section-header">C.2 WireGuard Mesh and Network Routing</h3>
+<p><strong>1. Inspect active WireGuard interface and transfer statistics:</strong></p>
+<pre><code>wg show</code></pre>
+<p><strong>2. Verify host routing table for remote VM subnets:</strong></p>
+<pre><code>ip route show | grep -E '10.50|10.60'</code></pre>
+<p><strong>3. Test reachability across guest subnets:</strong></p>
+<pre><code>ping -c 3 10.60.2.172</code></pre>
+<p><strong>4. Check active iptables packet forwarding rules:</strong></p>
+<pre><code>sudo iptables -L FORWARD -n -v</code></pre>
+<h3 class="section-header">C.3 Model Service Verification (REST API Diagnostics)</h3>
+<p><strong>1. Test neural embedding endpoint on VM 1 (Port 8000):</strong></p>
+<pre style="overflow-x: hidden; white-space: pre-wrap; word-break: break-all; background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #0284c7; padding: 10px 14px; font-family: monospace; font-size: 8.5pt; border-radius: 4px; line-height: 1.5;"><code>curl -X POST http://10.60.1.119:8000/embed \
+  -H 'Content-Type: application/json' -d '{"texts": ["FastAPI Python Developer", "KVM Specialist"]}'</code></pre>
+<p><strong>2. Test cross-encoder reranking endpoint on VM 2 (Port 8001):</strong></p>
+<pre style="overflow-x: hidden; white-space: pre-wrap; word-break: break-all; background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #0284c7; padding: 10px 14px; font-family: monospace; font-size: 8.5pt; border-radius: 4px; line-height: 1.5;"><code>curl -X POST http://10.60.2.172:8001/rerank \
+  -H 'Content-Type: application/json' -d '{"query": "Python Backend", "candidates": ["FastAPI Developer", "React Developer"]}'</code></pre>
+</body>
+</html>

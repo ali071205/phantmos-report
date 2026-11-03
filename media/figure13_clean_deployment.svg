@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 880" width="100%" height="100%" style="background:#ffffff; font-family:'Segoe UI', -apple-system, BlinkMacSystemFont, Arial, sans-serif;">
+  <defs>
+    <!-- Arrow Marker -->
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#3b82f6" />
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#10b981" />
+    </marker>
+    <marker id="arrow-purple" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#8b5cf6" />
+    </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#f59e0b" />
+    </marker>
+
+    <!-- Card Shadow -->
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="115%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- ================= TIER 1: CLIENT USER TIER ================= -->
+  <g id="tier-user">
+    <rect x="360" y="25" width="380" height="85" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="2" filter="url(#shadow)" />
+    <circle cx="410" cy="67" r="22" fill="#3b82f6" opacity="0.15" />
+    <text x="410" y="73" font-size="20" text-anchor="middle" fill="#1d4ed8">🌐</text>
+    <text x="450" y="58" font-size="15" font-weight="700" fill="#1e3a8a">Student / Candidate Web Client</text>
+    <text x="450" y="80" font-size="12" fill="#475569">React 19 &bull; TypeScript &bull; Dark Mode Dashboard</text>
+  </g>
+
+  <!-- Connection: Client to HF Spaces -->
+  <line x1="550" y1="110" x2="550" y2="175" stroke="#3b82f6" stroke-width="2.5" marker-end="url(#arrow)" />
+  <rect x="475" y="130" width="150" height="24" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" />
+  <text x="550" y="146" font-size="11" font-weight="700" fill="#2563eb" text-anchor="middle">HTTPS &bull; TLS / SSL (Port 443)</text>
+
+  <!-- ================= TIER 2: PUBLIC CLOUD CONTAINER TIER ================= -->
+  <rect x="110" y="175" width="880" height="340" rx="12" fill="#f8fafc" stroke="#64748b" stroke-width="2" stroke-dasharray="6,4" filter="url(#shadow)" />
+  <rect x="130" y="160" width="360" height="28" rx="5" fill="#0f172a" />
+  <text x="310" y="179" font-size="12.5" font-weight="700" fill="#ffffff" text-anchor="middle">HUGGING FACE SPACES (PUBLIC CLOUD RUNTIME)</text>
+
+  <!-- Inside Container Box -->
+  <rect x="140" y="210" width="820" height="280" rx="10" fill="#ffffff" stroke="#0ea5e9" stroke-width="2" filter="url(#shadow)" />
+  <rect x="160" y="196" width="320" height="26" rx="4" fill="#0284c7" />
+  <text x="320" y="213" font-size="12" font-weight="700" fill="#ffffff" text-anchor="middle">Docker Container (Debian Linux &bull; UID 1000 &bull; Port 7860)</text>
+
+  <!-- Frontend Subsystem Box -->
+  <rect x="170" y="240" width="360" height="100" rx="8" fill="#f0f9ff" stroke="#38bdf8" stroke-width="1.5" />
+  <text x="350" y="270" font-size="14" font-weight="700" fill="#0369a1" text-anchor="middle">Frontend Application Service</text>
+  <text x="350" y="295" font-size="12" fill="#334155" text-anchor="middle">Nginx / Vite Static Asset Server</text>
+  <text x="350" y="318" font-size="11" fill="#64748b" text-anchor="middle">Responsive UI &bull; Real-time Telemetry &bull; Application Queue</text>
+
+  <!-- Backend Subsystem Box -->
+  <rect x="570" y="240" width="360" height="100" rx="8" fill="#f0fdf4" stroke="#4ade80" stroke-width="1.5" />
+  <text x="750" y="270" font-size="14" font-weight="700" fill="#15803d" text-anchor="middle">FastAPI Core Application Backend</text>
+  <text x="750" y="295" font-size="12" fill="#334155" text-anchor="middle">Asynchronous REST API Gateway</text>
+  <text x="750" y="318" font-size="11" fill="#64748b" text-anchor="middle">8 Autonomous Agents &bull; Pydantic V2 &bull; Background Tasks</text>
+
+  <!-- Arrow between Frontend and Backend -->
+  <line x1="530" y1="290" x2="565" y2="290" stroke="#0284c7" stroke-width="2" marker-end="url(#arrow)" />
+  <line x1="565" y1="300" x2="535" y2="300" stroke="#0284c7" stroke-width="2" marker-end="url(#arrow)" />
+  <text x="550" y="280" font-size="10" font-weight="700" fill="#0369a1" text-anchor="middle">Internal IPC</text>
+
+  <!-- Scheduled Ingestion Service inside Container -->
+  <rect x="170" y="365" width="760" height="105" rx="8" fill="#fefce8" stroke="#eab308" stroke-width="1.5" />
+  <text x="550" y="395" font-size="13.5" font-weight="700" fill="#a16207" text-anchor="middle">Automated Background Job Ingestion Engine (Cron Worker)</text>
+  <text x="550" y="420" font-size="12" fill="#475569" text-anchor="middle">Harvests from External APIs (Himalayas, Remotive, Arbeitnow, Hacker News)</text>
+  <text x="550" y="445" font-size="11" fill="#713f12" text-anchor="middle">HTML Sanitization &bull; Salary Normalization &bull; SHA-256 Deduplication Pipeline</text>
+
+  <!-- ================= TIER 3: EXTERNAL INFRASTRUCTURE & BACKENDS ================= -->
+
+  <!-- Line to Database (Left) -->
+  <path d="M 350 470 L 350 540 L 220 540 L 220 590" fill="none" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#arrow-amber)" />
+
+  <!-- Line to On-Prem Cluster (Center) -->
+  <path d="M 550 470 L 550 590" fill="none" stroke="#8b5cf6" stroke-width="2.5" marker-end="url(#arrow-purple)" />
+
+  <!-- Line to LLM Providers (Right) -->
+  <path d="M 750 470 L 750 540 L 880 540 L 880 590" fill="none" stroke="#10b981" stroke-width="2.5" marker-end="url(#arrow-green)" />
+
+  <!-- 1. Database & Persistence (Bottom-Left) -->
+  <g id="tier-database">
+    <rect x="60" y="600" width="320" height="235" rx="10" fill="#fffbeb" stroke="#f59e0b" stroke-width="2" filter="url(#shadow)" />
+    <rect x="80" y="586" width="220" height="26" rx="4" fill="#d97706" />
+    <text x="190" y="603" font-size="12" font-weight="700" fill="#ffffff" text-anchor="middle">SUPABASE CLOUD DATABASE</text>
+    
+    <text x="220" y="635" font-size="13.5" font-weight="700" fill="#92400e" text-anchor="middle">PostgreSQL Database Tier</text>
+    <line x1="85" y1="648" x2="355" y2="648" stroke="#fde68a" stroke-width="1.5" />
+    
+    <text x="85" y="675" font-size="11.5" fill="#451a03">&bull; <strong>Job Postings:</strong> De-duplicated schema</text>
+    <text x="85" y="700" font-size="11.5" fill="#451a03">&bull; <strong>Candidate Profiles:</strong> Structured skills</text>
+    <text x="85" y="725" font-size="11.5" fill="#451a03">&bull; <strong>Security:</strong> Row-Level Security (RLS)</text>
+    <text x="85" y="750" font-size="11.5" fill="#451a03">&bull; <strong>Storage:</strong> Compiled resume PDFs</text>
+    <text x="85" y="775" font-size="11.5" fill="#451a03">&bull; <strong>Authentication:</strong> Secure JWT tokens</text>
+    <text x="85" y="805" font-size="10.5" font-weight="700" fill="#b45309">[100% Student Privacy &amp; Access Control]</text>
+  </g>
+
+  <!-- 2. On-Premises Lab Virtualization Cluster (Bottom-Center) -->
+  <g id="tier-cluster">
+    <rect x="410" y="600" width="320" height="235" rx="10" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="2" filter="url(#shadow)" />
+    <rect x="430" y="586" width="280" height="26" rx="4" fill="#7c3aed" />
+    <text x="570" y="603" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle">CLUSTER OS (COLLEGE LAB WORKSTATIONS)</text>
+
+    <text x="570" y="635" font-size="13.5" font-weight="700" fill="#5b21b6" text-anchor="middle">Three-Node Linux KVM Cluster</text>
+    <line x1="435" y1="648" x2="705" y2="648" stroke="#ddd6fe" stroke-width="1.5" />
+
+    <text x="435" y="675" font-size="11.5" fill="#2e1065">&bull; <strong>Hardware:</strong> 3 &times; HP 200 Pro G4 PCs</text>
+    <text x="435" y="700" font-size="11.5" fill="#2e1065">&bull; <strong>Virtualization:</strong> KVM, QEMU &amp; libvirt</text>
+    <text x="435" y="725" font-size="11.5" fill="#2e1065">&bull; <strong>Mesh Network:</strong> WireGuard (10.50.0.0/32)</text>
+    <text x="435" y="750" font-size="11.5" fill="#2e1065">&bull; <strong>Embeddings:</strong> BGE-small-en-v1.5</text>
+    <text x="435" y="775" font-size="11.5" fill="#2e1065">&bull; <strong>Reranker:</strong> BAAI/bge-reranker-base</text>
+    <text x="435" y="805" font-size="10.5" font-weight="700" fill="#6d28d9">[Zero Cloud Cost &bull; 0.36 ms Latency]</text>
+  </g>
+
+  <!-- 3. AI Providers & Resume Compiler (Bottom-Right) -->
+  <g id="tier-llm">
+    <rect x="760" y="600" width="310" height="235" rx="10" fill="#f0fdf4" stroke="#10b981" stroke-width="2" filter="url(#shadow)" />
+    <rect x="780" y="586" width="260" height="26" rx="4" fill="#059669" />
+    <text x="910" y="603" font-size="12" font-weight="700" fill="#ffffff" text-anchor="middle">GENERATIVE AI &amp; PDF FACTORY</text>
+
+    <text x="915" y="635" font-size="13.5" font-weight="700" fill="#065f46" text-anchor="middle">Multi-Tier LLM Waterfall</text>
+    <line x1="785" y1="648" x2="1045" y2="648" stroke="#a7f3d0" stroke-width="1.5" />
+
+    <text x="785" y="675" font-size="11.5" fill="#022c22">&bull; <strong>Primary LLM:</strong> Gemini 2.5 Flash</text>
+    <text x="785" y="700" font-size="11.5" fill="#022c22">&bull; <strong>Fallback 1:</strong> Groq LLaMA 3.3 70B</text>
+    <text x="785" y="725" font-size="11.5" fill="#022c22">&bull; <strong>Fallback 2:</strong> Hugging Face Endpoints</text>
+    <text x="785" y="750" font-size="11.5" fill="#022c22">&bull; <strong>Resume Engine:</strong> Typst &amp; RenderCV</text>
+    <text x="785" y="775" font-size="11.5" fill="#022c22">&bull; <strong>Format:</strong> Clean ATS Standard PDF</text>
+    <text x="785" y="805" font-size="10.5" font-weight="700" fill="#047857">[Truthful STAR Bullet Points &bull; No Hallucination]</text>
+  </g>
+</svg>
